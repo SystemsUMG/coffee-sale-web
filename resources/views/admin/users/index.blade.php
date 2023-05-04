@@ -1,24 +1,28 @@
-@extends('layouts.app')
+@extends('app')
 @section('content')
     <div class="pagetitle">
-        <h1>Tipos de Usuarios</h1>
+        <h1>Usuarios</h1>
         <nav>
             <ol class="breadcrumb">
                 <li class="breadcrumb-item">Usuarios</li>
-                <li class="breadcrumb-item active">Tipos de Usuarios</li>
+                <li class="breadcrumb-item active">Lista</li>
             </ol>
         </nav>
     </div>
     <div class=" card">
         <div class="card-body">
             <div style="display: flex; justify-content: right;" class="py-3">
-                <button onclick="showCreate()" class="btn btn-primary rounded-3"><i class="fa-solid fa-plus"></i> Crear</button>
+                <button onclick="showCreate()" class="btn btn-primary rounded-3"><i class="fa-solid fa-plus"></i> Crear
+                </button>
             </div>
-            <table id="user-types-table" class="table table-bordered">
+            <table id="users-table" class="table table-bordered">
                 <thead>
                 <tr>
                     <th scope="col">#</th>
-                    <th scope="col">Descripción</th>
+                    <th scope="col">Nombre</th>
+                    <th scope="col">Apellido</th>
+                    <th scope="col">Correo Electrónico</th>
+                    <th scope="col">Tipo de Usuario</th>
                     <th scope="col">Estado</th>
                     <th scope="col">Acciones</th>
                 </tr>
@@ -30,7 +34,7 @@
     {{-- Modal Edit --}}
     <div class="modal fade" id="modal-edit" tabindex="-1">
         <div class="modal-dialog modal-lg ">
-            <div class="modal-content rounded-3 px-4 py-2">
+            <div class="modal-content rounded-5 px-4 py-2">
                 <div class="modal-header">
                     <h5 class="modal-title ">Editar Registro</h5>
                     <button type="button" class="btn fw-bold" data-bs-dismiss="modal" aria-label="Close">x</button>
@@ -66,13 +70,13 @@
     {{-- Modal Create --}}
     <div class="modal fade " id="modal-create" tabindex="-1">
         <div class="modal-dialog modal-lg">
-            <div class="modal-content rounded-3 px-4 py-2">
+            <div class="modal-content rounded-5 px-4 py-2">
                 <div class="modal-header">
                     <h5 class="modal-title ">Nuevo Registro</h5>
                     <button type="button" class="btn fw-bold" data-bs-dismiss="modal" aria-label="Close">x</button>
                 </div>
                 <div class="modal-body align-content-center">
-                    <form class="row g-3 needs-validation" action="{{ route('user-types.store') }}" method="POST" novalidate id="form-create">
+                    <form class="row g-3 needs-validation" method="POST" novalidate id="form-create">
                         @csrf
                         <div class="col-md-4 position-relative">
                             <h6 for="validationTooltip01" class="form-label">Descripción</h6>
@@ -100,34 +104,38 @@
 @endsection
 @push('scripts')
     <script>
-        let table = $('#user-types-table')
+        let table = $('#users-table')
         table.DataTable({
             "language": {
-                "url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"},
+                "url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
+            },
             destroy: true,
             responsive: true,
             processing: true,
             dom: 'Bfrtip',
             buttons: [{
                 extend: 'excelHtml5',
-                title: 'Tipos de usuarios',
-                filename: 'tipos_de_usuarios',
+                title: 'Usuarios',
+                filename: 'Usuarios',
             }],
-            ajax: '/user-types-list',
+            ajax: '/users-list',
             columns: [
-                { data: 'id'},
-                { data: 'description' },
-                { data: 'active' },
-                { data: 'actions' },
+                {data: 'id'},
+                {data: 'name'},
+                {data: 'last_name'},
+                {data: 'email'},
+                {data: 'type'},
+                {data: 'status'},
+                {data: 'actions'},
             ],
         });
 
         function showModalEdit(id) {
-            axios.get('/user-types/'+id)
+            axios.get('/user-types/' + id)
                 .then(function (response) {
                     document.getElementById('edit-description').value = response.data.description
                     document.getElementById('edit-status').value = response.data.active
-                    document.getElementById('form-edit').setAttribute('action', '/user-types/'+id)
+                    document.getElementById('form-edit').setAttribute('action', '/user-types/' + id)
                 })
                 .catch(function (error) {
                     showAlert('error', error.data.message)
@@ -142,6 +150,7 @@
             let modal = new bootstrap.Modal(document.getElementById('modal-create'), {
                 keyboard: false
             })
+            document.getElementById('form-create').setAttribute('action', '/user-types')
             modal.show()
         }
 
