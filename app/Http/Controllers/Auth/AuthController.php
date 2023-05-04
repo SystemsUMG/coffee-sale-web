@@ -33,4 +33,9 @@ class AuthController extends Controller
             return back()->with('error', 'Usuario no encontrado');
         }
     }
+
+    public function logout() {
+        Auth::logout();
+        return redirect()->route('login.index');
+    }
 }

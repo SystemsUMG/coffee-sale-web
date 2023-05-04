@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\AuthController;
-use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\frontend\HomeController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,14 +15,22 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::controller(AuthController::class)->group(function () {
-    Route::get('/login', 'loginIndex');
-    Route::post('/login', 'login')->name('login');
+Route::controller(AuthController::class)->middleware('guest')->prefix('/')->group(function () {
+    Route::get('login', 'loginIndex')->name('login.index');
+    Route::post('login', 'login')->name('login');
 });
 
-
 Route::middleware('auth')->group(function () {
-    Route::get('/dashboard', function () {
-        return view('admin.dashboard.dashboard');
+    Route::post('logout', [AuthController::class, 'logout'])->name('logout');
+    Route::middleware('check.if.admin')->prefix('admin')->group(function () {
+        Route::get('/dashboard', function () {
+            return view('admin.dashboard.dashboard');
+        });
     });
+    Route::get('/departments', function () {
+        return view('admin.departments.index');
+    });
+
+    Route::resource('', HomeController::class);
+
 });
