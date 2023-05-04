@@ -25,7 +25,8 @@ class AuthController extends Controller
             if (Auth::attempt(['email' => $request->email, 'password' => $request->password], true)) {
                 $user->remember_token = Str::random(15);
                 $user->save();
-                return redirect()->route('home');
+                $route = $user->type == 1 ? 'home' : 'home.index';
+                return redirect()->route($route);
             } else {
                 return back()->with('error', 'Credenciales incorrectas');
             }
