@@ -64,7 +64,7 @@
                     <button type="button" class="btn fw-bold" data-bs-dismiss="modal" aria-label="Close">x</button>
                 </div>
                 <div class="modal-body align-content-center">
-                    <form class="row g-3 needs-validation" action="{{ route('user-types.store') }}" method="POST"
+                    <form class="row g-3 needs-validation" action="" method="POST"
                           novalidate id="form-create">
                         @csrf
                         <div class="col-md-4 position-relative">

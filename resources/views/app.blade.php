@@ -190,9 +190,9 @@
                             <i class="bi bi-box-arrow-right"></i>
                             <span>Cerrar Sesión</span>
                         </a>
-{{--                        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">--}}
-{{--                            @csrf--}}
-{{--                        </form>--}}
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                            @csrf
+                        </form>
                     </li>
 
                 </ul><!-- End Profile Dropdown Items -->
