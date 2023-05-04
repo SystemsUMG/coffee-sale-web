@@ -222,18 +222,11 @@
             </a>
         </li><!-- End Profile Page Nav -->
         <li class="nav-item">
-            <a class="nav-link collapsed" href="#">
-                <i class="fa-solid fa-user-gear"></i>
-                <span>Tipos</span>
+            <a class="nav-link collapsed" href="{{ route('products.index') }}">
+                <i class="fa-solid fa-list-ul"></i>
+                <span>Productos</span>
             </a>
         </li><!-- End Profile Page Nav -->
-        <li class="nav-item">
-            <a class="nav-link collapsed" href="#">
-                <i class="fa-solid fa-location-dot"></i>
-                <span>Departamentos</span>
-            </a>
-        </li>
-
     </ul>
 
 </aside><!-- End Sidebar-->
