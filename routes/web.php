@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\AuthController;
-use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\frontend\HomeController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -30,4 +30,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/departments', function () {
         return view('admin.departments.index');
     });
+
+    Route::resource('', HomeController::class);
+
 });
