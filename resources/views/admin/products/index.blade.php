@@ -20,9 +20,10 @@
                 <tr>
                     <th scope="col">#</th>
                     <th scope="col">Nombre</th>
-                    <th scope="col">Apellido</th>
-                    <th scope="col">Correo Electrónico</th>
-                    <th scope="col">Tipo de Usuario</th>
+                    <th scope="col">Descripción</th>
+                    <th scope="col">Stock</th>
+                    <th scope="col">Precio</th>
+                    <th scope="col">Peso</th>
                     <th scope="col">Estado</th>
                     <th scope="col">Acciones</th>
                 </tr>
@@ -31,10 +32,32 @@
         </div>
     </div>
 
+    {{-- Modal Create --}}
+    <div class="modal fade " id="modal-create" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content rounded-3 px-4 py-2">
+                <div class="modal-header">
+                    <h5 class="modal-title ">Nuevo Registro</h5>
+                    <button type="button" class="btn fw-bold" data-bs-dismiss="modal" aria-label="Close">x</button>
+                </div>
+                <div class="modal-body align-content-center">
+                    <form class="row g-3 needs-validation" method="POST" action="{{ route('products.store') }}" novalidate enctype="multipart/form-data" id="form-create">
+                        @csrf
+                        @include('admin.products.form')
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-cancel rounded-3" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-submit rounded-3" form="form-create">Guardar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     {{-- Modal Edit --}}
     <div class="modal fade" id="modal-edit" tabindex="-1">
         <div class="modal-dialog modal-lg ">
-            <div class="modal-content rounded-5 px-4 py-2">
+            <div class="modal-content rounded-3 px-4 py-2">
                 <div class="modal-header">
                     <h5 class="modal-title ">Editar Registro</h5>
                     <button type="button" class="btn fw-bold" data-bs-dismiss="modal" aria-label="Close">x</button>
@@ -43,20 +66,7 @@
                     <form class="row g-3 needs-validation" method="POST" novalidate id="form-edit">
                         @method('PUT')
                         @csrf
-                        <div class="col-md-4 position-relative">
-                            <h6 for="validationTooltip01" class="form-label">Descripción</h6>
-                            <input name="description" type="text" class="form-control" id="edit-description" required>
-                            <div class="invalid-feedback">
-                                Este campo es obligatorio.
-                            </div>
-                        </div>
-                        <div class="col-md-3">
-                            <h6 for="validationDefault04" class="form-label">Estado</h6>
-                            <select name="active" class="form-select" id="edit-status" required>
-                                <option value="1">Activo</option>
-                                <option value="0">Inactivo</option>
-                            </select>
-                        </div>
+                        @include('admin.products.form')
                     </form>
                 </div>
                 <div class="modal-footer">
@@ -67,40 +77,6 @@
         </div>
     </div>
 
-    {{-- Modal Create --}}
-    <div class="modal fade " id="modal-create" tabindex="-1">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content rounded-5 px-4 py-2">
-                <div class="modal-header">
-                    <h5 class="modal-title ">Nuevo Registro</h5>
-                    <button type="button" class="btn fw-bold" data-bs-dismiss="modal" aria-label="Close">x</button>
-                </div>
-                <div class="modal-body align-content-center">
-                    <form class="row g-3 needs-validation" method="POST" novalidate id="form-create">
-                        @csrf
-                        <div class="col-md-4 position-relative">
-                            <h6 for="validationTooltip01" class="form-label">Descripción</h6>
-                            <input name="description" type="text" class="form-control" id="create-description" required>
-                            <div class="invalid-feedback">
-                                Este campo es obligatorio.
-                            </div>
-                        </div>
-                        <div class="col-md-3">
-                            <h6 for="validationDefault04" class="form-label">Estado</h6>
-                            <select name="active" class="form-select" id="create-status" required>
-                                <option value="1">Activo</option>
-                                <option value="0">Inactivo</option>
-                            </select>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-cancel rounded-4" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="submit" class="btn btn-submit rounded-4" form="form-create">Guardar</button>
-                </div>
-            </div>
-        </div>
-    </div>
 @endsection
 @push('scripts')
     <script>
@@ -111,31 +87,52 @@
             },
             destroy: true,
             responsive: true,
-            processing: true,
+            serverSide: true,
             dom: 'Bfrtip',
             buttons: [{
                 extend: 'excelHtml5',
                 title: 'Usuarios',
                 filename: 'Usuarios',
             }],
-            ajax: '/users-list',
+            ajax: '{{ route('product.list') }}',
             columns: [
                 {data: 'id'},
                 {data: 'name'},
-                {data: 'last_name'},
-                {data: 'email'},
-                {data: 'type'},
-                {data: 'status'},
-                {data: 'actions'},
+                {data: 'description'},
+                {data: 'stock'},
+                {data: 'price'},
+                {data: 'weight'},
+                {
+                    data: 'active',
+                    render: function (active) {
+                        return active === 1 ? '<span class="badge rounded-pill bg-success">Activo</span>' :
+                            '<span class="badge rounded-pill bg-danger">Inactivo</span>'
+                    }
+                },
+                {
+                    data: 'id',
+                    render: function (id) {
+                        let route = 'admin/products'
+                        let dataDestroy = [id, "'"+ route +"'"]
+                        return '<button onclick="showModalEdit('+id+')" type="button" class="btn  btn-sm btn-warning" title="Editar"><i class="fa-sharp fa-solid fa-pen-to-square"></i></button> '+
+                            '<button onclick="destroy('+ dataDestroy +')" type="button" class="btn  btn-sm btn-primary" title="Ver fotos"><i class="fa-solid fa-eye"></i></button> '+
+                            '<button onclick="destroy('+ dataDestroy +')" type="button" class="btn  btn-sm btn-danger" title="Eliminar"><i class="fa-solid fa-trash"></i></button> '
+                    }
+                },
             ],
         });
 
         function showModalEdit(id) {
-            axios.get('/user-types/' + id)
+            axios.get('/admin/products/' + id)
                 .then(function (response) {
-                    document.getElementById('edit-description').value = response.data.description
-                    document.getElementById('edit-status').value = response.data.active
-                    document.getElementById('form-edit').setAttribute('action', '/user-types/' + id)
+                    let product = response.data
+                    document.getElementById('form-edit').querySelector('#name').value = product.name;
+                    document.getElementById('form-edit').querySelector('#description').value = product.description;
+                    document.getElementById('form-edit').querySelector('#price').value = product.price;
+                    document.getElementById('form-edit').querySelector('#stock').value = product.stock;
+                    document.getElementById('form-edit').querySelector('#weight').value = product.weight;
+                    document.getElementById('form-edit').querySelector('#active').value = product.active;
+                    document.getElementById('form-edit').setAttribute('action', '/admin/products/' + id)
                 })
                 .catch(function (error) {
                     showAlert('error', error.data.message)
@@ -150,7 +147,6 @@
             let modal = new bootstrap.Modal(document.getElementById('modal-create'), {
                 keyboard: false
             })
-            document.getElementById('form-create').setAttribute('action', '/user-types')
             modal.show()
         }
 

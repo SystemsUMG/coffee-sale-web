@@ -28,8 +28,9 @@ Route::middleware('auth')->group(function () {
     Route::middleware('check.if.admin')->prefix('admin')->group(function () {
         Route::get('dashboard', [DashboardController::class, 'index'])->name('home');
         Route::resource('products', ProductController::class);
+        Route::get('products-list', [ProductController::class, 'list'])->name('product.list');
     });
 
-    Route::resource('', HomeController::class);
+    Route::resource('home', HomeController::class);
 
 });
