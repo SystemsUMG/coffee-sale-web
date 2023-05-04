@@ -295,7 +295,7 @@
 @if (session()->has('error'))
     <script>
         Toast.fire({
-            icon: 'danger',
+            icon: 'error',
             title: '{{ session('error') }}'
         })
     </script>

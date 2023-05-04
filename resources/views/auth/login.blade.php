@@ -28,7 +28,7 @@
                             <h3>Inicio de Sesión</h3>
                             <p class="mb-4">Bienvenido, ingresa tus credenciales.</p>
                         </div>
-                        <form id="form-login" method="POST" action="{{ route('login.verify') }}">
+                        <form id="form-login" method="POST" action="{{ route('login') }}">
                             @csrf
                             <label>Correo Electrónico</label>
                             <div class="form-group last mb-3">
@@ -38,16 +38,9 @@
                             <div class="form-group last mb-3">
                                 <input type="password" class="form-control" id="password" name="password" value="{{ old('password') }}" required>
                             </div>
-                            <label hidden="hidden" id="label-code">Código de Seguiridad</label>
-                            <div class="form-group last mb-3" hidden="hidden" id="div-code">
-                                <input type="number" class="form-control" id="code" name="code" required autocomplete="current-code">
-                            </div>
-                            <button type="button" id="btn-login" onclick="login()" class="btn btn-block btn-primary">
+                            <button type="submit" id="btn-login" class="btn btn-block btn-primary">
                                 Iniciar Sesión
                                 <span class="spinner-border spinner-border-sm" id="loader" role="status" hidden="hidden"></span>
-                            </button>
-                            <button hidden="hidden" type="button" id="btn-access" onclick="access()" class="btn btn-block btn-primary">
-                                Ingresar
                             </button>
                             @if (Route::has('password.request'))
                                 <a class="btn btn-link" href="{{ route('password.request') }}">
@@ -66,14 +59,29 @@
         toast: true,
         position: 'top-end',
         showConfirmButton: false,
-        timer: 5000,
+        timer: 3500,
         timerProgressBar: true,
         didOpen: (toast) => {
             toast.addEventListener('mouseenter', Swal.stopTimer)
             toast.addEventListener('mouseleave', Swal.resumeTimer)
         }
     })
+    function showAlert(type, title) {
+        Toast.fire({
+            icon: type,
+            title: title
+        })
+    }
 </script>
+@if (session()->has('success'))
+    <script>
+        Toast.fire({
+            icon: 'success',
+            title: '{{ session('success') }}'
+        })
+    </script>
+@endif
+
 @if (session()->has('error'))
     <script>
         Toast.fire({
@@ -82,72 +90,6 @@
         })
     </script>
 @endif
-<script>
-    let btnLogin = document.getElementById('btn-login')
-    let btnAccess = document.getElementById('btn-access')
-    let divCode = document.getElementById('div-code')
-    let labelCode = document.getElementById('label-code')
-    let email = document.getElementById('email')
-    let password = document.getElementById('password')
-    let code = document.getElementById('code')
-    let loader = document.getElementById('loader')
-
-    function login() {
-        code.value = ''
-        loader.hidden = false
-        btnLogin.disabled = true
-        axios.post('/login', {
-            email: document.getElementById('email').value,
-            password: document.getElementById('password').value
-        }).then(function (response) {
-            btnLogin.hidden = true
-            btnAccess.hidden = false
-            divCode.hidden = false
-            labelCode.hidden = false
-            loader.hidden = true
-            email.addEventListener('keydown', function(e) {
-                e.preventDefault();
-            });
-            password.addEventListener('keydown', function(e) {
-                e.preventDefault();
-            });
-            Swal.fire({
-                icon: 'info',
-                title: 'Verifica tu identidad',
-                text: response.data.message,
-            })
-        }).catch(function (error) {
-            loader.hidden = true
-            btnLogin.disabled = false
-            Toast.fire({
-                icon: 'error',
-                title: error.response.data.message
-            })
-        });
-    }
-
-    function access() {
-        axios.post('/search-user', {
-            email: email.value,
-            password: password.value,
-            code: code.value,
-        }).then(function () {
-            Toast.fire({
-                icon: 'success',
-                title: 'Iniciando sesión...'
-            })
-            setTimeout(function() {
-                document.getElementById('form-login').submit()
-            }, 2000);
-        }).catch(function (error) {
-            Toast.fire({
-                icon: 'error',
-                title: error.response.data.message
-            })
-        });
-    }
-
-</script>
 <script src="https://preview.colorlib.com/theme/bootstrap/login-form-07/js/jquery-3.3.1.min.js"></script>
 <script src="https://preview.colorlib.com/theme/bootstrap/login-form-07/js/popper.min.js"></script>
 <script src="https://preview.colorlib.com/theme/bootstrap/login-form-07/js/bootstrap.min.js"></script>
