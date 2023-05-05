@@ -39,6 +39,10 @@ Route::middleware('auth')->group(function () {
 
         Route::resource('users', UserController::class);
         Route::get('users-list', [UserController::class, 'list'])->name('users.list');
+        Route::get('user/image/{id}', [UserController::class, 'showImage']);
+        Route::post('user/image/{user}', [UserController::class, 'image']);
+        Route::post('user/image/delete', [UserController::class, 'deleteImage']);
+
 
         Route::resource('settings', SettingController::class);
         Route::get('settings-list', [SettingController::class, 'list'])->name('settings.list');

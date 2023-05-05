@@ -68,6 +68,13 @@
                         @csrf
                         @include('admin.users.form')
                     </form>
+                    <div id="div-picture">
+                        <br>
+                        <h6 class="form-label" id="label-images">Foto de Perfil</h6>
+                        <form action="/" class="dropzone" id="picture">
+                            @csrf
+                        </form>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-cancel rounded-4" data-bs-dismiss="modal">Cancelar</button>
@@ -131,9 +138,11 @@
                     document.getElementById('form-edit').querySelector('#account_number').value = user.account_number;
                     document.getElementById('form-edit').setAttribute('action', '/admin/users/' + id)
                     document.getElementById('form-edit').querySelector('#type').setAttribute('disabled', 'true')
+                    document.getElementById('form-edit').querySelector('#password').removeAttribute('required')
+                    dropzonePicture(id)
                 })
                 .catch(function (error) {
-                    showAlert('error', error.data.message)
+                    showAlert('error', error)
                 })
             let modal = new bootstrap.Modal(document.getElementById('modal-edit'), {
                 keyboard: false
@@ -146,6 +155,60 @@
                 keyboard: false
             })
             modal.show()
+        }
+
+        function dropzonePicture(id) {
+            let dropzonePicture = Dropzone.forElement("#picture");
+            if (dropzonePicture) {
+                restoreDropzone('picture', 'div-picture')
+            }
+            new Dropzone("#picture", {
+                init: function() {
+                    let myDropzone = this;
+                    let route = '/admin/user/image/' + id
+                    $.ajax({
+                        type: "GET",
+                        url: route,
+                        success: function(response)
+                        {
+                            let mockFile = { name: response.name , size: response.size };
+                            myDropzone.displayExistingFile(mockFile, response.route);
+                        }
+                    });
+                },
+                url: '/admin/user/image/' + id + '?type=1',
+                autoProcessQueue: true,
+                paramName: "file",
+                maxFilesize: 4,
+                addRemoveLinks: true,
+                maxFiles: 1,
+                dictDefaultMessage: 'Click o arrastre la imagen de portada',
+                dictRemoveFile: "Borrar",
+                acceptedFiles: 'image/*',
+                removedfile: function (file) {
+                    $.ajax({
+                        type: 'POST',
+                        url: '/admin/user/image/delete',
+                        data: {name: file.name, id: id },
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                    });
+                    let _ref;
+                    return (_ref = file.previewElement) != null ? _ref.parentNode.removeChild(file.previewElement) : void 0;
+                }
+            });
+        }
+
+        function restoreDropzone(id, div) {
+            let dropzoneElement = document.getElementById(id);
+            dropzoneElement.parentNode.removeChild(dropzoneElement);
+            let nuevoDropzoneElement = document.createElement('form');
+            nuevoDropzoneElement.setAttribute('action', '/');
+            nuevoDropzoneElement.setAttribute('class', 'dropzone');
+            nuevoDropzoneElement.setAttribute('id', id);
+            nuevoDropzoneElement.innerHTML = '@csrf';
+            document.getElementById(div).appendChild(nuevoDropzoneElement);
         }
 
     </script>
