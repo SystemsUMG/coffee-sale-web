@@ -2,7 +2,9 @@
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-12 text-center mt-3">
-                <h2 class="footer-heading"><a href="#" class="logo">Cafetenango</a></h2>
+                <h2 class="footer-heading">
+                    <img src="{{ asset('assets/img/logo.png') }}" width="10%">
+                </h2>
             </div>
         </div>
         <div class="row mt-3">
