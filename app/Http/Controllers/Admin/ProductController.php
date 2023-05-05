@@ -10,26 +10,20 @@ use Illuminate\Http\Request;
 class ProductController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Display the view of the resource.
      */
     public function index()
     {
         return view('admin.products.index');
     }
 
+    /**
+     * Return a listing of the resource.
+     */
     public function list(Request $request)
     {
-        $server_side = $this->serverSideParameters($request);
-        $data = Product::whereRaw(true);
-        $recordsTotal = $data->count();
-        $filtered = $data->search($server_side['search'])->orderBy($server_side['order_val'], $server_side['dir_val']);
-        $recordsFiltered = $filtered->count();
-        $filtered_data = $filtered->offset($server_side['start_val'])->limit($server_side['limit_val'])->get();
-        $this->response = [
-            'recordsTotal' => $recordsTotal,
-            'recordsFiltered' => $recordsFiltered,
-            'data' => $filtered_data,
-        ];
+        $products = Product::whereRaw(true);
+        $this->response = $this->listData($request, $products);
         return response()->json($this->response);
     }
 
