@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\frontend\HomeController;
 use Illuminate\Support\Facades\Route;
@@ -22,15 +24,13 @@ Route::controller(AuthController::class)->middleware('guest')->prefix('/')->grou
 
 Route::middleware('auth')->group(function () {
     Route::post('logout', [AuthController::class, 'logout'])->name('logout');
+
     Route::middleware('check.if.admin')->prefix('admin')->group(function () {
-        Route::get('/dashboard', function () {
-            return view('admin.dashboard.dashboard');
-        });
-    });
-    Route::get('/departments', function () {
-        return view('admin.departments.index');
+        Route::get('dashboard', [DashboardController::class, 'index'])->name('home');
+        Route::resource('products', ProductController::class);
+        Route::get('products-list', [ProductController::class, 'list'])->name('product.list');
     });
 
-    Route::resource('', HomeController::class);
+    Route::resource('home', HomeController::class);
 
 });

@@ -5,10 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
+use App\Models\Scopes\Searchable;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
 
 class Product extends Model
 {
     use HasFactory;
+    use Searchable;
 
     protected $table = 'products';
     protected $fillable = [
@@ -19,6 +22,8 @@ class Product extends Model
         'weight',
         'active',
     ];
+
+    protected $searchableFields = ['*'];
 
     public function images(): MorphMany
     {
