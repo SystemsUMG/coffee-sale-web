@@ -37,17 +37,7 @@ class ProductController extends Controller
     {
         try {
             $validate = $request->validated();
-            $product = Product::create($validate);
-            $product->images()->create([
-                'url' => $request->file('cover_photo')->store('images', 'public'),
-                'type' => 1,
-            ]);
-            foreach ($request->photos as $photo) {
-                $product->images()->create([
-                    'url' => $photo->store('images', 'public'),
-                    'type' => 2,
-                ]);
-            }
+            Product::create($validate);
             $this->response_type = 'success';
             $this->message = 'Se ha creado el producto';
         } catch (\Exception $exception) {
