@@ -43,17 +43,3 @@
         Campo obligatorio.
     </div>
 </div>
-<div class="col-md-6">
-    <h6 for="validationDefault04" class="form-label">Portada</h6>
-    <input name="cover_photo" type="file" class="form-control" id="cover_photo" required>
-    <div class="invalid-feedback">
-        Campo obligatorio.
-    </div>
-</div>
-<div class="col-md-6">
-    <h6 for="validationDefault04" class="form-label">Fotos complementarias</h6>
-    <input name="photos[]" multiple type="file" class="form-control" id="photos" required>
-    <div class="invalid-feedback">
-        Campo obligatorio.
-    </div>
-</div>

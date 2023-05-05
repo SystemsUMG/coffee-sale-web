@@ -31,6 +31,7 @@
             </table>
         </div>
     </div>
+    <input type="text" hidden="hidden" id="route-images">
 
     {{-- Modal Create --}}
     <div class="modal fade " id="modal-create" tabindex="-1">
@@ -68,6 +69,20 @@
                         @csrf
                         @include('admin.products.form')
                     </form>
+                    <div id="div-cover">
+                        <br>
+                        <h6 class="form-label" id="label-images">Portada</h6>
+                        <form action="/" class="dropzone" id="cover">
+                            @csrf
+                        </form>
+                    </div>
+                    <div id="div-galery">
+                        <br>
+                        <h6 class="form-label" id="label-images">Galería</h6>
+                        <form action="/" class="dropzone" id="galery">
+                            @csrf
+                        </form>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-cancel rounded-4" data-bs-dismiss="modal">Cancelar</button>
@@ -115,7 +130,6 @@
                         let route = 'admin/products'
                         let dataDestroy = [id, "'"+ route +"'"]
                         return '<button onclick="showModalEdit('+id+')" type="button" class="btn  btn-sm btn-warning" title="Editar"><i class="fa-sharp fa-solid fa-pen-to-square"></i></button> '+
-                            '<button onclick="destroy('+ dataDestroy +')" type="button" class="btn  btn-sm btn-primary" title="Ver fotos"><i class="fa-solid fa-eye"></i></button> '+
                             '<button onclick="destroy('+ dataDestroy +')" type="button" class="btn  btn-sm btn-danger" title="Eliminar"><i class="fa-solid fa-trash"></i></button> '
                     }
                 },
@@ -133,6 +147,7 @@
                     document.getElementById('form-edit').querySelector('#weight').value = product.weight;
                     document.getElementById('form-edit').querySelector('#active').value = product.active;
                     document.getElementById('form-edit').setAttribute('action', '/admin/products/' + id)
+                    dropzoneCover(id)
                 })
                 .catch(function (error) {
                     showAlert('error', error.data.message)
@@ -149,6 +164,103 @@
             })
             modal.show()
         }
+        function dropzoneCover(id) {
+            let dropzoneCover = Dropzone.forElement("#cover");
+            if (dropzoneCover) {
+                restoreDropzone('cover', 'div-cover')
+            }
+            let dropzoneImages = Dropzone.forElement("#galery");
+            if (dropzoneImages) {
+                restoreDropzone('galery', 'div-galery')
+            }
+            new Dropzone("#cover", {
+                init: function() {
+                    let myDropzone = this;
+                    let route = '/admin/images/'+id+'?type=1'
+                    $.ajax({
+                        type: "GET",
+                        url: route,
+                        success: function(response)
+                        {
+                            $.each(response, function( index, value) {
+                                let mockFile = { name: value.name , size: value.size };
+                                myDropzone.displayExistingFile(mockFile, value.route);
+                            })
+                        }
+                    });
+                },
+                url: '/admin/product/images/' + id+'?type=1',
+                autoProcessQueue: true,
+                paramName: "file",
+                maxFilesize: 4,
+                addRemoveLinks: true,
+                maxFiles: 1,
+                dictDefaultMessage: 'Click o arrastre la imagen de portada',
+                dictRemoveFile: "Borrar",
+                acceptedFiles: 'image/*',
+                removedfile: function (file) {
+                    $.ajax({
+                        type: 'POST',
+                        url: '/admin/product/delete',
+                        data: {name: file.name, id: id },
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                    });
+                    let _ref;
+                    return (_ref = file.previewElement) != null ? _ref.parentNode.removeChild(file.previewElement) : void 0;
+                }
+            });
 
+            new Dropzone("#galery", {
+                init: function() {
+                    let myDropzone = this;
+                    let route = '/admin/images/'+id+'?type=2'
+                    $.ajax({
+                        type: "GET",
+                        url: route,
+                        success: function(response)
+                        {
+                            $.each(response, function( index, value) {
+                                let mockFile = { name: value.name , size: value.size };
+                                myDropzone.displayExistingFile(mockFile, value.route);
+                            })
+                        }
+                    });
+                },
+                url: '/admin/product/images/' + id+'?type=2',
+                autoProcessQueue: true,
+                paramName: "file",
+                maxFilesize: 4,
+                addRemoveLinks: true,
+                maxFiles: 10,
+                dictDefaultMessage: 'Click o arrastre imágenes para cargar',
+                dictRemoveFile: "Borrar",
+                acceptedFiles: 'image/*',
+                removedfile: function (file) {
+                    $.ajax({
+                        type: 'POST',
+                        url: '/admin/product/delete',
+                        data: {name: file.name, id: id },
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                    });
+                    let _ref;
+                    return (_ref = file.previewElement) != null ? _ref.parentNode.removeChild(file.previewElement) : void 0;
+                }
+            });
+        }
+
+        function restoreDropzone(id, div) {
+            let dropzoneElement = document.getElementById(id);
+            dropzoneElement.parentNode.removeChild(dropzoneElement);
+            let nuevoDropzoneElement = document.createElement('form');
+            nuevoDropzoneElement.setAttribute('action', '/');
+            nuevoDropzoneElement.setAttribute('class', 'dropzone');
+            nuevoDropzoneElement.setAttribute('id', id);
+            nuevoDropzoneElement.innerHTML = '@csrf';
+            document.getElementById(div).appendChild(nuevoDropzoneElement);
+        }
     </script>
 @endpush

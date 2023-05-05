@@ -17,7 +17,9 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-
+Route::get('/', function () {
+    return redirect(route('login.index'));
+});
 Route::controller(AuthController::class)->middleware('guest')->prefix('/')->group(function () {
     Route::get('login', 'loginIndex')->name('login.index');
     Route::post('login', 'login')->name('login');
@@ -29,9 +31,15 @@ Route::middleware('auth')->group(function () {
 
     Route::middleware('check.if.admin')->prefix('admin')->group(function () {
         Route::get('dashboard', [DashboardController::class, 'index'])->name('home');
+        //Productos
         Route::resource('products', ProductController::class);
         Route::get('products-list', [ProductController::class, 'list'])->name('product.list');
+
         Route::resource('users', UserController::class);
         Route::get('users-list', [UserController::class, 'list'])->name('users.list');
+
+        Route::post('product/images/{product}', [ProductController::class, 'images']);
+        Route::post('product/delete', [ProductController::class, 'deleteImages']);
+        Route::get('images/{id}', [ProductController::class, 'showImages']);
     });
 });
