@@ -58,19 +58,21 @@ class ProductController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(ProductRequest $request, string $id)
     {
-        //
+        try {
+            $validate = $request->validated();
+            $product = Product::find($id);
+            $product->update($validate);
+            $this->response_type = 'success';
+            $this->message = 'Se ha actualizado el producto';
+        } catch (\Exception $exception) {
+            $this->message = $exception->getMessage();
+        }
+        return redirect()->back()->with($this->response_type, $this->message);
+
     }
 
     /**
@@ -78,21 +80,47 @@ class ProductController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        try {
+            $product = Product::find($id);
+            $images = $product->images;
+            $product->delete();
+            foreach ($images as $image) {
+                Storage::disk('public')->delete($image->url);
+                $image->delete();
+            }
+            $this->status_code = 200;
+            $this->message = 'Se ha eliminado el producto';
+        } catch (\Exception) {
+            $this->message = 'No se ha podido eliminar';
+        } finally {
+            $this->response = [
+                'message' => $this->message
+            ];
+        }
+        return response()->json($this->response, $this->status_code);
     }
 
     public function images(Request $request, Product $product)
     {
         try{
             $name = $request->file('file')->getClientOriginalName();
-            $product->images()->create([
-                'url'   => $request->file('file')->storeAs('images', $name, 'public'),
-                'type'  => $request->type
-            ]);
-            return response()->json('Éxito');
-        }catch (\Exception $exception) {
-            return response()->json($exception->getMessage(), 500);
+            $this->message = 'Imagen guardada';
+            $this->status_code = 200;
+            if ($request->type == 1) {
+                $image = $product->images()->where('type', 1)->first();
+                if (!$image) {
+                    $this->saveImage($product->images(), $request, $name);
+                } else {
+                    $this->message = 'Elimina la imagen actual para agreagar otra';
+                    $this->status_code = 400;
+                }
+            } else {
+                $this->saveImage($product->images(), $request, $name);
+            }
+        } catch (\Exception $exception) {
+            $this->message = $exception->getMessage();
         }
+        return response()->json($this->message, $this->status_code);
     }
 
     public function deleteImages(Request $request)

@@ -127,10 +127,8 @@
                 {
                     data: 'id',
                     render: function (id) {
-                        let route = 'admin/products'
-                        let dataDestroy = [id, "'"+ route +"'"]
                         return '<button onclick="showModalEdit('+id+')" type="button" class="btn  btn-sm btn-warning" title="Editar"><i class="fa-sharp fa-solid fa-pen-to-square"></i></button> '+
-                            '<button onclick="destroy('+ dataDestroy +')" type="button" class="btn  btn-sm btn-danger" title="Eliminar"><i class="fa-solid fa-trash"></i></button> '
+                            '<button onclick="destroy('+"'"+"products/"+ id +"'"+')" type="button" class="btn  btn-sm btn-danger" title="Eliminar"><i class="fa-solid fa-trash"></i></button> '
                     }
                 },
             ],
@@ -164,6 +162,7 @@
             })
             modal.show()
         }
+
         function dropzoneCover(id) {
             let dropzoneCover = Dropzone.forElement("#cover");
             if (dropzoneCover) {
