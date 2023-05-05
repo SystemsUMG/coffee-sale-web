@@ -78,6 +78,14 @@
 @push('scripts')
     <script>
         let table = $('#users-table')
+        let settings = {
+            1 : 'Facebook',
+            2 : 'Instagram',
+            3 : 'Twitter',
+            4 : 'Tiktok',
+            5 : 'Email',
+            6 : 'Telefono',
+        }
         table.DataTable({
             "language": {
                 "url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
@@ -94,7 +102,12 @@
             ajax: '{{ route('settings.list') }}',
             columns: [
                 {data: 'id'},
-                {data: 'key'},
+                {
+                    data: 'key',
+                    render: function (key) {
+                        return settings[key];
+                    }
+                },
                 {data: 'name'},
                 {data: 'value'},
                 {

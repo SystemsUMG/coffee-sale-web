@@ -1,8 +1,10 @@
 <div class="col-md-4">
     <h6 for="validationDefault04" class="form-label">Tipo</h6>
     <select name="key" class="form-select" id="key" required>
-        <option value="1">1</option>
-        <option value="0">0</option>
+        @foreach($settings as $key => $value)
+            <option value="{{ $key }}">{{ $value }}</option>
+        @endforeach
+
     </select>
     <div class="invalid-feedback">
         Campo obligatorio.

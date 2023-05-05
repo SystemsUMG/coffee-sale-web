@@ -14,8 +14,10 @@ class SettingController extends Controller
      * Display a listing of the resource.
      */
     public function index()
+
     {
-        return view('admin.settings.index');
+        $settings =  $this->settings_key;
+        return view('admin.settings.index', compact('settings'));
     }
 
     /**
@@ -71,7 +73,20 @@ class SettingController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        try {
+            $validate = $request->validate([
+                'settings_key' => ['required'],
+                'name' => ['required', 'string'],
+                'value' => ['required', 'string'],
+            ]);
+            $setting = Setting::find($id);
+            $setting->update($validate);
+            $this->response_type = 'success';
+            $this->message = 'Se ha actualizado la configuracion';
+        } catch (Exception $exception) {
+            $this->message = $exception->getMessage();
+        }
+        return redirect()->back()->with($this->response_type, $this->message);
     }
 
     /**
