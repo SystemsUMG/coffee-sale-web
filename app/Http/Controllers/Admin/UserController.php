@@ -3,12 +3,12 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\UserRequest;
+use App\Models\Image;
 use App\Models\User;
 use Exception;
-use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller
 {
@@ -30,7 +30,7 @@ class UserController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(UserRequest $request) : RedirectResponse
+    public function store(Request $request)
     {
         try {
             $validate = $request->validate([
@@ -41,13 +41,8 @@ class UserController extends Controller
                 'phone'    => 'required',
                 'type'     => 'required',
                 'account_number'  => 'numeric',
-                'profile_picture' => 'required|image',
             ]);
-            $product = User::create($validate);
-            $product->images()->create([
-                'url' => $request->file('profile_picture')->store('images', 'public'),
-                'type' => 1,
-            ]);
+            User::create($validate);
             $this->response_type = 'success';
             $this->message = 'Se ha creado el usuario';
         } catch (Exception $exception) {
@@ -66,19 +61,26 @@ class UserController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      */
     public function update(Request $request, string $id)
     {
-        //
+        try {
+            $validate = $request->validate([
+                'name'     => 'required|string',
+                'email'    => 'required|email|unique:users,email,'.$id,
+                'address'  => 'required|string',
+                'phone'    => 'required',
+                'account_number'  => 'numeric',
+            ]);
+            $user = User::find($id);
+            $user->update($validate);
+            $this->response_type = 'success';
+            $this->message = 'Se ha actualizado el usuario';
+        } catch (Exception $exception) {
+            $this->message = $exception->getMessage();
+        }
+        return redirect()->back()->with($this->response_type, $this->message);
     }
 
     /**
@@ -89,20 +91,75 @@ class UserController extends Controller
         try {
             $user = User::find($id);
             if ($user) {
+                $images = $user->images;
                 $user->delete();
+                foreach ($images as $image) {
+                    Storage::disk('public')->delete($image->url);
+                    $image->delete();
+                }
+                $this->status_code = 200;
                 $this->message = 'Usuario eliminado';
             } else {
                 $this->message = 'El usuario no existe';
             }
-            $this->status_code = 200;
-
-        } catch (Exception) {
+        } catch (\Exception) {
             $this->message = 'El usuario no se puede eliminar';
         } finally {
-            $response = [
+            $this->response = [
                 'message' => $this->message
             ];
         }
-        return response()->json($response, $this->status_code);
+        return response()->json($this->response, $this->status_code);
+    }
+
+    public function image(Request $request, User $user)
+    {
+        try{
+            $name = $request->file('file')->getClientOriginalName();
+            $this->message = 'Imagen guardada';
+            $this->status_code = 200;
+
+            $image = $user->images()->where('type', 1)->first();
+            if (!$image) {
+                $this->saveImage($user->images(), $request, $name);
+            } else {
+                $this->message = 'Elimina la imagen actual para agregar otra';
+                $this->status_code = 400;
+            }
+
+        } catch (\Exception $exception) {
+            $this->message = $exception->getMessage();
+        }
+        return response()->json($this->message, $this->status_code);
+    }
+
+    public function deleteImage(Request $request)
+    {
+        try {
+            $url = Image::where('url', 'images/'.$request->name)->get();
+            if (count($url) == 1) {
+                Storage::disk('public')->delete('images/'.$request->name);
+            }
+            $user = User::where('id', $request->id)->first();
+            $image = $user->images()->where('url', 'images/'.$request->name)->first();
+            $image->delete();
+            return response()->json('Éxito');
+        }catch (\Exception $exception) {
+            return response()->json($exception->getMessage(), 500);
+        }
+    }
+    public function showImage(User $id): JsonResponse
+    {
+        $image = $id->images()->where('type', 1)->first();
+        if ($image) {
+            $contents = [
+                'name'  => basename($image->url),
+                'size'  => Storage::disk('public')->size($image->url),
+                'route' => asset(Storage::url($image->url)),
+            ];
+            return response()->json($contents);
+        } else {
+            return response()->json([], 500);
+        }
     }
 }
