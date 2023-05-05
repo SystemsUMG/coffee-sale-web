@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Product;
+use App\Models\User;
 use Illuminate\Http\Request;
 use App\Models\Setting;
 
@@ -39,7 +40,7 @@ class SettingController extends Controller
                 'value' => ['required', 'string'],
             ]);
             $setting = Setting::create($validate);
-            
+
             $this->response_type = 'success';
             $this->message = 'Se ha creado la configuracion';
         } catch (\Exception $exception) {
@@ -53,7 +54,8 @@ class SettingController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $setting = Setting::find($id);
+        return response()->json($setting);
     }
 
     /**
@@ -77,6 +79,23 @@ class SettingController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        try {
+            $setting = Setting::find($id);
+            if ($setting) {
+                $setting->delete();
+                $this->message = 'Configuracion eliminada';
+            } else {
+                $this->message = 'La configuracion no existe';
+            }
+            $this->status_code = 200;
+
+        } catch (Exception) {
+            $this->message = 'La configuracion no se puede eliminar';
+        } finally {
+            $response = [
+                'message' => $this->message
+            ];
+        }
+        return response()->json($response, $this->status_code);
     }
 }

@@ -21,7 +21,7 @@
                     <th scope="col">#</th>
                     <th scope="col">Tipo</th>
                     <th scope="col">Nombre</th>
-                    <th scope="col">Value</th>
+                    <th scope="col">Valor</th>
                     <th scope="col">Acciones</th>
                 </tr>
                 </thead>
@@ -63,7 +63,7 @@
                     <form class="row g-3 needs-validation" method="POST" novalidate id="form-edit">
                         @method('PUT')
                         @csrf
-                        @include('admin.products.form')
+                        @include('admin.settings.form')
                     </form>
                 </div>
                 <div class="modal-footer">
@@ -103,7 +103,7 @@
                         let route = 'admin/settings'
                         let dataDestroy = [id, "'"+ route +"'"]
                         return '<button onclick="showModalEdit('+id+')" type="button" class="btn  btn-sm btn-warning" title="Editar"><i class="fa-sharp fa-solid fa-pen-to-square"></i></button> '+
-                            '<button onclick="destroy('+ dataDestroy +')" type="button" class="btn  btn-sm btn-danger" title="Eliminar"><i class="fa-solid fa-trash"></i></button> '
+                            '<button onclick="destroy('+"'"+"settings/"+ id +"'"+')" type="button" class="btn  btn-sm btn-danger" title="Eliminar"><i class="fa-solid fa-trash"></i></button> '
                     }
                 },
             ],
@@ -113,9 +113,9 @@
             axios.get('/admin/settings/' + id)
                 .then(function (response) {
                     let setting = response.data
-                    document.getElementById('form-edit').querySelector('#name').value = setting.key;
-                    document.getElementById('form-edit').querySelector('#description').value = setting.name;
-                    document.getElementById('form-edit').querySelector('#price').value = setting.value;
+                    document.getElementById('form-edit').querySelector('#key').value = setting.key;
+                    document.getElementById('form-edit').querySelector('#name').value = setting.name;
+                    document.getElementById('form-edit').querySelector('#value').value = setting.value;
                     document.getElementById('form-edit').setAttribute('action', '/admin/setting/' + id)
                 })
                 .catch(function (error) {
