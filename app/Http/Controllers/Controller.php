@@ -22,13 +22,27 @@ class Controller extends BaseController
         $this->response = [];
     }
 
-    public function serverSideParameters($request) {
-        return [
-            'search' => $request->search['value'] ?? '',
+    /**
+     * Return data of model.
+     */
+    public function listData($request, $data) {
+        $server_side = [
+            'search'    => $request->search['value'] ?? '',
             'limit_val' => $request->length,
             'start_val' => $request->start,
             'order_val' => $request->columns[$request->order[0]['column']]['data'],
-            'dir_val' => $request->order[0]['dir'],
+            'dir_val'   => $request->order[0]['dir'],
+        ];
+
+        $recordsTotal = $data->count();
+        $filtered = $data->search($server_side['search'])->orderBy($server_side['order_val'], $server_side['dir_val']);
+        $recordsFiltered = $filtered->count();
+        $filtered_data = $filtered->offset($server_side['start_val'])->limit($server_side['limit_val'])->get();
+
+        return [
+            'recordsTotal'    => $recordsTotal,
+            'recordsFiltered' => $recordsFiltered,
+            'data'            => $filtered_data,
         ];
     }
 }

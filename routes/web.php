@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\frontend\HomeController;
 use Illuminate\Support\Facades\Route;
@@ -29,6 +30,8 @@ Route::middleware('auth')->group(function () {
         Route::get('dashboard', [DashboardController::class, 'index'])->name('home');
         Route::resource('products', ProductController::class);
         Route::get('products-list', [ProductController::class, 'list'])->name('product.list');
+        Route::resource('users', UserController::class);
+        Route::get('users-list', [UserController::class, 'list'])->name('users.list');
     });
 
     Route::resource('home', HomeController::class);

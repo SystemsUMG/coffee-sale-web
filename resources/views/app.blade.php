@@ -25,7 +25,6 @@
     <link href="/assets/vendor/quill/quill.snow.css" rel="stylesheet">
     <link href="/assets/vendor/quill/quill.bubble.css" rel="stylesheet">
     <link href="/assets/vendor/remixicon/remixicon.css" rel="stylesheet">
-    <link href="/assets/vendor/simple-datatables/style.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs5/jszip-2.5.0/dt-1.13.2/b-2.3.4/b-colvis-2.3.4/b-html5-2.3.4/r-2.4.0/datatables.min.css"/>
 
         <!-- Template Main CSS File -->
@@ -206,9 +205,9 @@
         </li><!-- End Dashboard Nav -->
         <li class="nav-heading">Usuarios</li>
         <li class="nav-item">
-            <a class="nav-link collapsed" href="#">
+            <a class="nav-link collapsed" href="{{ route('users.index') }}">
                 <i class="fa-solid fa-users"></i>
-                <span>Lista</span>
+                <span>Usuarios</span>
             </a>
         </li><!-- End Profile Page Nav -->
         <li class="nav-item">
@@ -239,7 +238,6 @@
 <script src="/assets/vendor/chart.js/chart.umd.js"></script>
 <script src="/assets/vendor/echarts/echarts.min.js"></script>
 <script src="/assets/vendor/quill/quill.min.js"></script>
-<script src="/assets/vendor/simple-datatables/simple-datatables.js"></script>
 <script src="/assets/vendor/tinymce/tinymce.min.js"></script>
 <script src="/assets/vendor/php-email-form/validate.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.min.js" integrity="sha512-STof4xm1wgkfm7heWqFJVn58Hm3EtS31XFaagaa8VMReCXAkQnJZ+jEy8PCC/iT18dFy95WcExNHFTqLyp72eQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
