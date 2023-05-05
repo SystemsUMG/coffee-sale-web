@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Route;
 Route::controller(AuthController::class)->middleware('guest')->prefix('/')->group(function () {
     Route::get('login', 'loginIndex')->name('login.index');
     Route::post('login', 'login')->name('login');
+    Route::resource('', HomeController::class);
 });
 
 Route::middleware('auth')->group(function () {
@@ -30,7 +31,4 @@ Route::middleware('auth')->group(function () {
     Route::get('/departments', function () {
         return view('admin.departments.index');
     });
-
-    Route::resource('', HomeController::class);
-
 });
