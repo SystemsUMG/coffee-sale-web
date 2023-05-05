@@ -98,25 +98,22 @@
             columns: [
                 {data: 'id'},
                 {data: 'name'},
-                {data: 'description'},
-                {data: 'stock'},
-                {data: 'price'},
-                {data: 'weight'},
+                {data: 'email'},
+                {data: 'address'},
+                {data: 'phone'},
                 {
-                    data: 'active',
-                    render: function (active) {
-                        return active === 1 ? '<span class="badge rounded-pill bg-success">Activo</span>' :
-                            '<span class="badge rounded-pill bg-danger">Inactivo</span>'
+                    data: 'type',
+                    render: function (type) {
+                        return type === 1 ? '<span class="badge rounded-pill bg-success">Administrador</span>' :
+                            '<span class="badge rounded-pill bg-primary">Cliente</span>'
                     }
                 },
+                {data: 'account_number'},
                 {
                     data: 'id',
                     render: function (id) {
-                        let route = 'admin/users'
-                        let dataDestroy = [id, "'"+ route +"'"]
                         return '<button onclick="showModalEdit('+id+')" type="button" class="btn  btn-sm btn-warning" title="Editar"><i class="fa-sharp fa-solid fa-pen-to-square"></i></button> '+
-                            '<button onclick="destroy('+ dataDestroy +')" type="button" class="btn  btn-sm btn-primary" title="Ver fotos"><i class="fa-solid fa-eye"></i></button> '+
-                            '<button onclick="destroy('+ dataDestroy +')" type="button" class="btn  btn-sm btn-danger" title="Eliminar"><i class="fa-solid fa-trash"></i></button> '
+                            '<button onclick="destroy('+"'"+"users/"+ id +"'"+')" type="button" class="btn  btn-sm btn-danger" title="Eliminar"><i class="fa-solid fa-trash"></i></button> '
                     }
                 },
             ],
@@ -125,14 +122,15 @@
         function showModalEdit(id) {
             axios.get('/admin/users/' + id)
                 .then(function (response) {
-                    let product = response.data
-                    document.getElementById('form-edit').querySelector('#name').value = product.name;
-                    document.getElementById('form-edit').querySelector('#description').value = product.description;
-                    document.getElementById('form-edit').querySelector('#price').value = product.price;
-                    document.getElementById('form-edit').querySelector('#stock').value = product.stock;
-                    document.getElementById('form-edit').querySelector('#weight').value = product.weight;
-                    document.getElementById('form-edit').querySelector('#active').value = product.active;
-                    document.getElementById('form-edit').setAttribute('action', '/admin/products/' + id)
+                    let user = response.data
+                    document.getElementById('form-edit').querySelector('#name').value = user.name;
+                    document.getElementById('form-edit').querySelector('#email').value = user.email;
+                    document.getElementById('form-edit').querySelector('#address').value = user.address;
+                    document.getElementById('form-edit').querySelector('#phone').value = user.phone;
+                    document.getElementById('form-edit').querySelector('#type').value = user.type;
+                    document.getElementById('form-edit').querySelector('#account_number').value = user.account_number;
+                    document.getElementById('form-edit').setAttribute('action', '/admin/users/' + id)
+                    document.getElementById('form-edit').querySelector('#type').setAttribute('disabled', 'true')
                 })
                 .catch(function (error) {
                     showAlert('error', error.data.message)

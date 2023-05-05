@@ -3,8 +3,12 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\UserRequest;
 use App\Models\User;
+use Exception;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
 
 class UserController extends Controller
 {
@@ -24,19 +28,32 @@ class UserController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(UserRequest $request) : RedirectResponse
     {
-        //
+        try {
+            $validate = $request->validate([
+                'name'     => 'required|string',
+                'email'    => 'required|email|unique:users,email',
+                'password' => 'required',
+                'address'  => 'required|string',
+                'phone'    => 'required',
+                'type'     => 'required',
+                'account_number'  => 'numeric',
+                'profile_picture' => 'required|image',
+            ]);
+            $product = User::create($validate);
+            $product->images()->create([
+                'url' => $request->file('profile_picture')->store('images', 'public'),
+                'type' => 1,
+            ]);
+            $this->response_type = 'success';
+            $this->message = 'Se ha creado el usuario';
+        } catch (Exception $exception) {
+            $this->message = $exception->getMessage();
+        }
+        return redirect()->back()->with($this->response_type, $this->message);
     }
 
     /**
@@ -44,7 +61,8 @@ class UserController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $user = User::with('images')->find($id);
+        return response()->json($user);
     }
 
     /**
@@ -68,6 +86,23 @@ class UserController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        try {
+            $user = User::find($id);
+            if ($user) {
+                $user->delete();
+                $this->message = 'Usuario eliminado';
+            } else {
+                $this->message = 'El usuario no existe';
+            }
+            $this->status_code = 200;
+
+        } catch (Exception) {
+            $this->message = 'El usuario no se puede eliminar';
+        } finally {
+            $response = [
+                'message' => $this->message
+            ];
+        }
+        return response()->json($response, $this->status_code);
     }
 }

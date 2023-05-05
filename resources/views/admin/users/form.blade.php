@@ -6,54 +6,51 @@
     </div>
 </div>
 <div class="col-md-4">
-    <h6 class="form-label">Descripción</h6>
-    <input name="description" type="text" class="form-control" id="description" required>
+    <h6 class="form-label">Email</h6>
+    <input name="email" type="text" class="form-control" id="email" required>
     <div class="invalid-feedback">
         Campo obligatorio.
     </div>
 </div>
 <div class="col-md-4">
-    <h6 class="form-label">Precio</h6>
-    <input name="price" type="number" step="0.01" class="form-control" id="price" required>
-    <div class="invalid-feedback">
-        Campo obligatorio y numérico.
-    </div>
-</div>
-<div class="col-md-4">
-    <h6 class="form-label">Peso</h6>
-    <input name="weight" type="number" step="0.01" class="form-control" id="weight" required>
-    <div class="invalid-feedback">
-        Campo obligatorio y numérico.
-    </div>
-</div>
-<div class="col-md-4">
-    <h6 class="form-label">Stock</h6>
-    <input name="stock" type="number" class="form-control" id="stock" required>
+    <h6 class="form-label">Contraseña</h6>
+    <input name="password" type="password" class="form-control" id="password" required>
     <div class="invalid-feedback">
         Campo obligatorio.
     </div>
 </div>
 <div class="col-md-4">
-    <h6 for="validationDefault04" class="form-label">Estado</h6>
-    <select name="active" class="form-select" id="active" required>
-        <option value="1">Activo</option>
-        <option value="0">Inactivo</option>
+    <h6 class="form-label">Dirección</h6>
+    <input name="address" type="text" class="form-control" id="address" required>
+    <div class="invalid-feedback">
+        Campo obligatorio.
+    </div>
+</div>
+<div class="col-md-4">
+    <h6 class="form-label">Teléfono</h6>
+    <input name="phone" type="text" class="form-control" id="phone" required>
+    <div class="invalid-feedback">
+        Campo obligatorio.
+    </div>
+</div>
+<div class="col-md-4">
+    <h6 class="form-label">Tipo</h6>
+    <select name="type" class="form-select" id="type" required>
+        <option value="1">Administrador</option>
+        <option value="2">Cliente</option>
     </select>
     <div class="invalid-feedback">
         Campo obligatorio.
     </div>
 </div>
-<div class="col-md-6">
-    <h6 for="validationDefault04" class="form-label">Portada</h6>
-    <input name="cover_photo" type="file" class="form-control" id="cover_photo" required>
+<div class="col-md-4">
+    <h6 class="form-label">Número de Cuenta</h6>
+    <input name="account_number" type="number" class="form-control" id="account_number">
     <div class="invalid-feedback">
-        Campo obligatorio.
+        Campo numérico.
     </div>
 </div>
 <div class="col-md-6">
-    <h6 for="validationDefault04" class="form-label">Fotos complementarias</h6>
-    <input name="photos[]" multiple type="file" class="form-control" id="photos" required>
-    <div class="invalid-feedback">
-        Campo obligatorio.
-    </div>
+    <h6 class="form-label">Foto de Perfil</h6>
+    <input name="profile_picture" type="file" class="form-control" id="profile_picture">
 </div>
