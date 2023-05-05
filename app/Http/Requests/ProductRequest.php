@@ -28,8 +28,6 @@ class ProductRequest extends FormRequest
             'price' => ['required', 'numeric'],
             'weight' => ['required', 'numeric'],
             'active' => ['required', 'string'],
-            'cover_photo' => ['required', 'image'],
-            'photos' => ['required', 'array'],
         ];
     }
 }

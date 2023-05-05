@@ -45,4 +45,11 @@ class Controller extends BaseController
             'data'            => $filtered_data,
         ];
     }
+
+    public function saveImage($model, $request, $name) {
+        $model->create([
+            'url'   => $request->file('file')->storeAs('images', $name, 'public'),
+            'type'  => $request->type
+        ]);
+    }
 }
