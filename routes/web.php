@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\frontend\HomeController;
 use Illuminate\Support\Facades\Route;
@@ -18,10 +19,12 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+
 Route::controller(AuthController::class)->middleware('guest')->prefix('/')->group(function () {
     Route::get('login', 'loginIndex')->name('login.index');
     Route::post('login', 'login')->name('login');
 });
+
 
 Route::middleware('auth')->group(function () {
     Route::post('logout', [AuthController::class, 'logout'])->name('logout');
@@ -32,6 +35,9 @@ Route::middleware('auth')->group(function () {
         Route::get('products-list', [ProductController::class, 'list'])->name('product.list');
         Route::resource('users', UserController::class);
         Route::get('users-list', [UserController::class, 'list'])->name('users.list');
+        Route::resource('settings', SettingController::class);
+        Route::get('settings-list', [SettingController::class, 'list'])->name('settings.list');
+
     });
 
     Route::resource('home', HomeController::class);
