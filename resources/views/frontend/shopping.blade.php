@@ -13,7 +13,7 @@
     </style>
 @endpush
 @section('content')
-    <div class="container mt-5 mb-5">
+    <div class="container pt-5 mt-5 mb-0 pb-0 vh-100">
         <div class="row">
             <div class="col-sm-6">
                 <img
@@ -42,7 +42,7 @@
             </div>
         </div>
     </div>
-    <div class="bg-black p-4 p-sm-3">
+    <div class="bg-black p-4 mt-0 p-sm-3">
         <div class="row justify-content-center">
             <div class="card text-bg-dark col-sm-2 m-2">
                 <div class="card-body">
