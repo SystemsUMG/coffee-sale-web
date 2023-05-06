@@ -28,8 +28,8 @@
             <div class="row justify-content-center mt-5">
                 <div class="col-md-6 col-lg-5">
                     <div class="login-wrap p-4 p-md-5">
-                        <div class="icon d-flex align-items-center justify-content-center">
-                            <img src="assets/img/logo.svg" alt="Image" class="img-fluid">
+                        <div class="icon d-flex align-items-center justify-content-center p-2">
+                            <img src="{{ asset('assets/img/favicon.png') }}" alt="Image" class="img-fluid">
                             <span class="fa fa-user-o"></span>
                         </div>
                         <h1 class="heading-section text-center">Inicio de Sesión</h1>

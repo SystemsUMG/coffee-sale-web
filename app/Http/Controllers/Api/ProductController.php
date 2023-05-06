@@ -1,29 +1,22 @@
 <?php
 
-namespace App\Http\Controllers\frontend;
+namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\Product\ImageGaleryResource;
+use App\Http\Resources\Product\ProductCollection;
+use App\Http\Resources\Product\ProductResource;
 use App\Models\Product;
 use Illuminate\Http\Request;
 
-class HomeController extends Controller
+class ProductController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        return view('frontend.pages.shopping', [
-            'products' => Product::get()
-        ]);
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+        return ProductCollection::make(Product::get());
     }
 
     /**
@@ -43,14 +36,6 @@ class HomeController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      */
     public function update(Request $request, string $id)
@@ -64,5 +49,10 @@ class HomeController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    public function imageGallery(Product $product)
+    {
+        return ImageGaleryResource::collection($product->images->where('type', 2));
     }
 }
