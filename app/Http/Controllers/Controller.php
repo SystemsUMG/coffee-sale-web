@@ -14,12 +14,21 @@ class Controller extends BaseController
     public string $message;
     public array $response;
     public string $response_type;
+    public array $settings_key;
     public function __construct()
     {
         $this->message = 'Ha ocurrido un error';
         $this->status_code = 400;
         $this->response_type = 'error';
         $this->response = [];
+        $this->settings_key = [
+            1 => 'Facebook',
+            2 => 'Instagram',
+            3 => 'Twitter',
+            4 => 'Tiktok',
+            5 => 'Email',
+            6 => 'Telefono',
+        ];
     }
 
     /**
