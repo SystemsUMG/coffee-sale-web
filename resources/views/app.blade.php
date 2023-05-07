@@ -204,7 +204,7 @@
     <ul class="sidebar-nav" id="sidebar-nav">
 
         <li class="nav-item">
-            <a class="nav-link collapsed " href="{{ route('home') }}">
+            <a class="nav-link collapsed " href="{{ route('dashboard') }}">
                 <i class="fa-solid fa-chart-line"></i>
                 <span>Dashboard</span>
             </a>

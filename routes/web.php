@@ -24,7 +24,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 //shopping
-Route::get('/', [HomeController::class, 'index']);
+Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/contact', [ContactController::class, 'index'])->name('contact.index');
 
 Route::controller(AuthController::class)->middleware('guest')->prefix('/')->group(function () {
@@ -40,7 +40,7 @@ Route::middleware('auth')->group(function () {
     Route::post('logout', [AuthController::class, 'logout'])->name('logout');
 
     Route::middleware('check.if.admin')->prefix('admin')->group(function () {
-        Route::get('dashboard', [DashboardController::class, 'index'])->name('home');
+        Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
         //products
         Route::resource('products', ProductController::class);

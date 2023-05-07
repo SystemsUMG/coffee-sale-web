@@ -39,7 +39,7 @@ class SettingController extends Controller
             $validate = $request->validate([
                 'key' => ['required', 'integer'],
                 'name' => ['required', 'string'],
-                'value' => ['required', 'string'],
+                'value' => ['nullable', 'string'],
             ]);
             $setting = Setting::create($validate);
 

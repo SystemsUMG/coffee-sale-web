@@ -19,7 +19,7 @@
 </div>
 <div class="col-md-4">
     <h6 class="form-label">Value</h6>
-    <input name="value" type="text" step="0.01" class="form-control" id="value" required>
+    <input name="value" type="text" step="0.01" class="form-control" id="value">
     <div class="invalid-feedback">
         Campo obligatorio.
     </div>
