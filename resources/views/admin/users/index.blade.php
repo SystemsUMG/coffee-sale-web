@@ -188,7 +188,7 @@
                 removedfile: function (file) {
                     $.ajax({
                         type: 'POST',
-                        url: '/admin/user/image/delete',
+                        url: '/admin/user-image/delete',
                         data: {name: file.name, id: id },
                         headers: {
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')

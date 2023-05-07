@@ -46,7 +46,14 @@ Route::middleware('auth')->group(function () {
         Route::get('users-list', [UserController::class, 'list'])->name('users.list');
         Route::get('user/image/{id}', [UserController::class, 'showImage']);
         Route::post('user/image/{user}', [UserController::class, 'image']);
-        Route::post('user/image/delete', [UserController::class, 'deleteImage']);
+        Route::post('user-image/delete', [UserController::class, 'deleteImage']);
+
+        //purchases
+        Route::resource('purchases', PurchaseController::class);
+        Route::get('purchases-list', [PurchaseController::class, 'list'])->name('purchases.list');
+        Route::get('purchase/image/{id}', [PurchaseController::class, 'showImage']);
+        Route::post('purchase/image/{purchase}', [PurchaseController::class, 'image']);
+        Route::post('purchase-image/delete', [PurchaseController::class, 'deleteImage']);
 
         //purchases
         Route::resource('purchases', PurchaseController::class);
