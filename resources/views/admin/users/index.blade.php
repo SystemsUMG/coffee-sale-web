@@ -111,8 +111,13 @@
                 {
                     data: 'type',
                     render: function (type) {
-                        return type === 1 ? '<span class="badge rounded-pill bg-success">Administrador</span>' :
-                            '<span class="badge rounded-pill bg-primary">Cliente</span>'
+                        if (type === 1) {
+                            return '<span class="badge rounded-pill bg-success">Administrador</span>'
+                        } else if (type === 2) {
+                            return '<span class="badge rounded-pill bg-primary">Cliente</span>'
+                        } else {
+                            return '<span class="badge rounded-pill bg-dark">Proveedor</span>'
+                        }
                     }
                 },
                 {data: 'account_number'},
