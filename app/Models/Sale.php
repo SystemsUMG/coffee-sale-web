@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Scopes\Searchable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -11,6 +12,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 class Sale extends Model
 {
     use HasFactory;
+    use Searchable;
 
     protected $table = 'sales';
     protected $fillable = [
@@ -22,13 +24,15 @@ class Sale extends Model
         'user_id',
     ];
 
+    protected $searchableFields = ['*'];
+
     public function sale_details(): HasMany
     {
         return $this->hasMany(SaleDetail::class, 'sale_id', 'id');
     }
 
-    public function customer(): BelongsTo
+    public function customer(): HasOne
     {
-        return $this->belongsTo(User::class);
+        return $this->hasOne(User::class, 'id', 'user_id');
     }
 }

@@ -15,6 +15,7 @@ class Controller extends BaseController
     public array $response;
     public string $response_type;
     public array $settings_key;
+    public array $payment_types;
     public function __construct()
     {
         $this->message = 'Ha ocurrido un error';
@@ -28,6 +29,11 @@ class Controller extends BaseController
             4 => 'Tiktok',
             5 => 'Email',
             6 => 'Telefono',
+        ];
+        $this->payment_types = [
+            1 => '<i class="fa-solid fa-money-bill-1-wave"></i> Efectivo',
+            2 => '<i class="fa-solid fa-money-check-dollar"></i> Cheque',
+            3 => '<i class="fa-solid fa-credit-card"></i> Tarjeta',
         ];
     }
 
@@ -60,5 +66,18 @@ class Controller extends BaseController
             'url'   => $request->file('file')->storeAs('images', $name, 'public'),
             'type'  => $request->type
         ]);
+    }
+
+    public function statuses()
+    {
+        return [
+            0 => '<i class="fa-solid fa-upload"></i> Generado',
+            1 => '<i class="fa-regular fa-clock"></i> Espera confirmación',
+            2 => '<i class="fa-solid fa-dollar-sign"></i> Pago confirmado',
+            3 => '<i class="fa-solid fa-spinner"></i> En proceso',
+            4 => '<i class="fa-solid fa-truck"></i> Enviado',
+            5 => '<i class="fa-solid fa-house-circle-check"></i> Entregado',
+            6 => '<i class="fa-solid fa-circle-arrow-left"></i> Recibido Devolución'
+        ];
     }
 }

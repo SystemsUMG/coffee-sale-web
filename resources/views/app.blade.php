@@ -223,6 +223,12 @@
             </a>
         </li><!-- End Profile Page Nav -->
         <li class="nav-item">
+            <a class="nav-link collapsed" href="{{ route('sales.index') }}">
+                <i class="fa-solid fa-cart-shopping"></i>
+                <span>Pedidos</span>
+            </a>
+        </li><!-- End Settings Page Nav -->
+        <li class="nav-item">
             <a class="nav-link collapsed" href="{{ route('settings.index') }}">
                 <i class="fa-sharp fa-solid fa-gear"></i>
                 <span>Configuración</span>
