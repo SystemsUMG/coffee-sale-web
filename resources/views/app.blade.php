@@ -225,7 +225,7 @@
         <li class="nav-item">
             <a class="nav-link collapsed" href="{{ route('settings.index') }}">
                 <i class="fa-sharp fa-solid fa-gear"></i>
-                <span>Configuracion</span>
+                <span>Configuración</span>
             </a>
         </li><!-- End Settings Page Nav -->
     </ul>

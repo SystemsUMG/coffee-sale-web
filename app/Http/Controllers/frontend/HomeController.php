@@ -14,7 +14,7 @@ class HomeController extends Controller
     public function index()
     {
         return view('frontend.pages.shopping', [
-            'products' => Product::get()
+            'products' => Product::where('active', 1)->get()
         ]);
     }
 
