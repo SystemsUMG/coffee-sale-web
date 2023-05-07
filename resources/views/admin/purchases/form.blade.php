@@ -22,8 +22,9 @@
 <div class="col-md-4">
     <h6 class="form-label">Usuario</h6>
     <select name="user_id" class="form-select" id="user_id" required>
-        <option value="1">Administrador</option>
-        <option value="2">Cliente</option>
+        @foreach($users as $user)
+            <option value="{{ $user->id }}">{{ $user->name }}</option>
+        @endforeach
     </select>
     <div class="invalid-feedback">
         Campo obligatorio.

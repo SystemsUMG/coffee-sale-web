@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Image;
 use App\Models\Purchase;
+use App\Models\User;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -17,14 +18,34 @@ class PurchaseController extends Controller
      */
     public function index()
     {
-        return view('admin.purchases.index');
+        $users = User::where('type', 3)->get(); //Usuarios proveedores
+        return view('admin.purchases.index', compact('users'));
     }
 
     public function list(Request $request)
     {
         $purchases = Purchase::whereRaw(true);
         $this->response = $this->listData($request, $purchases);
-        return response()->json($this->response);
+
+        $purchases = $this->response['data'];
+        $data = [];
+        foreach ($purchases as $purchase)
+        {
+            $data[] = [
+                'id'          => $purchase->id,
+                'description' => $purchase->description,
+                'price'       => $purchase->price,
+                'weight'      => $purchase->weight,
+                'user_id'     => $purchase->customer->name
+            ];
+        }
+
+        $response = [
+            'recordsTotal'    => $this->response['recordsTotal'],
+            'recordsFiltered' => $this->response['recordsFiltered'],
+            'data'            => $data,
+        ];
+        return response()->json($response);
     }
 
     /**

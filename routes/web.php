@@ -55,13 +55,6 @@ Route::middleware('auth')->group(function () {
         Route::post('purchase/image/{purchase}', [PurchaseController::class, 'image']);
         Route::post('purchase-image/delete', [PurchaseController::class, 'deleteImage']);
 
-        //purchases
-        Route::resource('purchases', PurchaseController::class);
-        Route::get('purchases-list', [PurchaseController::class, 'list'])->name('purchases.list');
-        Route::get('purchase/image/{id}', [PurchaseController::class, 'showImage']);
-        Route::post('purchase/image/{purchase}', [PurchaseController::class, 'image']);
-        Route::post('purchase-image/delete', [PurchaseController::class, 'deleteImage']);
-
         //settings
         Route::resource('settings', SettingController::class);
         Route::get('settings-list', [SettingController::class, 'list'])->name('settings.list');

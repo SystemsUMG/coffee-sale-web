@@ -106,13 +106,6 @@
                 {data: 'price'},
                 {data: 'weight'},
                 {data: 'user_id'},
-                // {
-                //     data: 'type',
-                //     render: function (type) {
-                //         return type === 1 ? '<span class="badge rounded-pill bg-success">Administrador</span>' :
-                //             '<span class="badge rounded-pill bg-primary">Cliente</span>'
-                //     }
-                // },
                 {
                     data: 'id',
                     render: function (id) {
