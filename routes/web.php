@@ -3,6 +3,8 @@
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\PurchaseController;
+use App\Http\Controllers\Admin\SaleController;
+use App\Http\Controllers\Admin\SaleDetailController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Auth\AuthController;
@@ -55,8 +57,17 @@ Route::middleware('auth')->group(function () {
         Route::post('purchase/image/{purchase}', [PurchaseController::class, 'image']);
         Route::post('purchase-image/delete', [PurchaseController::class, 'deleteImage']);
 
-        //settings
+        //Settings
         Route::resource('settings', SettingController::class);
         Route::get('settings-list', [SettingController::class, 'list'])->name('settings.list');
+
+        //Sales
+        Route::controller(SaleController::class)->group(function () {
+            Route::resource('sales', SaleController::class);
+            Route::get('sales-list', 'listSales')->name('sales.list');
+        });
+
+        //Sale Details
+        Route::resource('sale-details', SaleDetailController::class);
     });
 });
