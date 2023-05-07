@@ -24,8 +24,12 @@ use Illuminate\Support\Facades\Route;
 Route::resource('/', HomeController::class);
 
 Route::controller(AuthController::class)->middleware('guest')->prefix('/')->group(function () {
+    //login
     Route::get('login', 'loginIndex')->name('login.index');
     Route::post('login', 'login')->name('login');
+    //register
+    Route::get('register', 'registerIndex')->name('register.index');
+    Route::post('register', 'register')->name('register');
 });
 
 Route::middleware('auth')->group(function () {

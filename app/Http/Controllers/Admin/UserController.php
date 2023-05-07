@@ -8,6 +8,7 @@ use App\Models\User;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller
@@ -42,6 +43,7 @@ class UserController extends Controller
                 'type'     => 'required',
                 'account_number'  => 'numeric',
             ]);
+            $validate['password'] = Hash::make($request->password);
             User::create($validate);
             $this->response_type = 'success';
             $this->message = 'Se ha creado el usuario';
@@ -73,6 +75,7 @@ class UserController extends Controller
                 'phone'    => 'required',
                 'account_number'  => 'numeric',
             ]);
+            $validate['password'] = Hash::make($request->password);
             $user = User::find($id);
             $user->update($validate);
             $this->response_type = 'success';
