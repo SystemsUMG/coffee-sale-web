@@ -5,7 +5,8 @@ use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Auth\AuthController;
-use App\Http\Controllers\frontend\HomeController;
+use App\Http\Controllers\Frontend\ContactController;
+use App\Http\Controllers\Frontend\HomeController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -20,7 +21,8 @@ use Illuminate\Support\Facades\Route;
 */
 
 //shopping
-Route::resource('/', HomeController::class);
+Route::get('/', [HomeController::class, 'index']);
+Route::get('/contact', [ContactController::class, 'index'])->name('contact.index');
 
 Route::controller(AuthController::class)->middleware('guest')->prefix('/')->group(function () {
     Route::get('login', 'loginIndex')->name('login.index');

@@ -39,10 +39,17 @@
             <div class="offcanvas-body">
                 <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
                     <li class="nav-item">
-                        <a class="nav-link {{ ($isHome ? 'active' : '') }}" aria-current="page" href="#">Inicio</a>
+                        <a class="nav-link {{ ($isHome ? 'active' : '') }}" aria-current="page" href="{{ route('home') }}">Inicio</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Contácto</a>
+                        <a class="nav-link" href="{{ route('contact.index') }}">Contácto</a>
+                    </li>
+                    <li class="nav-item">
+                        <div class="nav-link">
+                            <p class="text-success">
+                                Q0.00
+                            </p>
+                        </div>
                     </li>
                     <li class="nav-item">
                         <div class="nav-link">

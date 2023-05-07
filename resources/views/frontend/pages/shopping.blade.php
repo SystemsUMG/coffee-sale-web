@@ -1,20 +1,50 @@
 @extends('frontend.index')
 @push('styles')
     <style>
+        .header {
+            margin-top: 5rem;
+            height: 73vh;
+        }
+
         .img-header {
             width: 40rem;
+        }
+
+        .bg-moss-green {
+            background: #14261C;
+        }
+
+        .bg-green-gray {
+            background: #48514C;
         }
 
         @media (max-width: 1250px) {
             .img-header {
                 width: 24rem;
             }
+            .header {
+                margin-top: 0;
+                height: 100vh;
+            }
+        }
+
+        @media (max-width: 820px) {
+            .header {
+                margin-top: 0;
+                height: 100%;
+            }
+        }
+
+        @media (min-width: 1920px) {
+            .header {
+                margin-top: 8rem;
+            }
         }
     </style>
 @endpush
 
 @section('content')
-    <div class="container pt-5 mt-5 mb-0 pb-0 vh-100">
+    <div class="container header">
         <div class="row">
             <div class="col-sm-6">
                 <img
@@ -22,7 +52,7 @@
                     class="img-header"
                     alt="">
             </div>
-            <div class="col-sm-6 text-start d-flex align-items-center p-5 p-sm-3">
+            <div class="col-sm-6 text-start p-5 p-sm-3">
                 <div class="row">
                     <p class="fw-bold">
                         Productos de la mejor calidad
@@ -43,13 +73,14 @@
             </div>
         </div>
     </div>
-    <div class="bg-black p-4 mt-0 p-sm-3">
+
+    <div class="bg-moss-green p-4 p-sm-3 mt-0">
         <div class="row justify-content-center">
-            <div class="card text-bg-dark col-sm-2 m-2">
+            <div class="card bg-green-gray text-light col-md-5 col-lg-4 col-xl-2 col-xxl-2 m-2">
                 <div class="card-body">
                     <div class="row">
-                        <div class="col-3 d-flex align-items-center">
-                            <i class="bi bi-truck fs-1"></i>
+                        <div class="col-3">
+                            <i class="bi bi-truck fs-1 text-success"></i>
                         </div>
                         <div class="col">
                             <h5 class="card-title">Envío gratis</h5>
@@ -58,11 +89,11 @@
                     </div>
                 </div>
             </div>
-            <div class="card text-bg-dark col-sm-2 m-2">
+            <div class="card bg-green-gray text-light col-md-5 col-lg-4 col-xl-3 col-xxl-2 m-2">
                 <div class="card-body">
                     <div class="row">
-                        <div class="col-3 d-flex align-items-center">
-                            <i class="bi bi-check-circle-fill fs-1"></i>
+                        <div class="col-3">
+                            <i class="bi bi-check-circle-fill fs-1 text-success"></i>
                         </div>
                         <div class="col">
                             <h5 class="card-title">Producto Natural</h5>
@@ -71,11 +102,11 @@
                     </div>
                 </div>
             </div>
-            <div class="card text-bg-dark col-sm-2 m-2">
+            <div class="card bg-green-gray text-light col-md-5 col-lg-4 col-xl-3 col-xxl-2 m-2">
                 <div class="card-body">
                     <div class="row">
-                        <div class="col-3 d-flex align-items-center">
-                            <i class="bi bi-cash fs-1"></i>
+                        <div class="col-3">
+                            <i class="bi bi-cash fs-1 text-success"></i>
                         </div>
                         <div class="col">
                             <h5 class="card-title">Grandes ahorros</h5>
@@ -86,13 +117,14 @@
             </div>
         </div>
     </div>
-    <div class="my-5 container">
+
+    <div class="my-5 container py-5" id="products">
         <h3 class="text-center display-6">Productos</h3>
-        <div class="swiper" id="products">
+        <div class="swiper">
             <div class="slide-content">
-                <div class="card-wrapper swiper-wrapper">
+                <div class="card-wrapper swiper-wrapper py-5">
                     @foreach($products as $product)
-                        <div class="card swiper-slide text-center py-5" id="template-card-product">
+                        <div class="card swiper-slide text-center py-2" id="template-card-product">
                             <div class="image-content">
                                 <div class="card-image">
                                     <img
@@ -121,7 +153,6 @@
             <div class="swiper-button-prev swiper-navBtn"></div>
             <div class="swiper-pagination"></div>
         </div>
-
 
         <div class="modal fade" id="modal-edit" tabindex="-1">
             <div class="modal-dialog modal-lg modal-dialog-centered">
@@ -177,6 +208,7 @@
 
         const containerImages = document.querySelector('#container-images')
         const template = document.querySelector('#template-images').content
+
         async function getImageGallery(productId) {
             try {
                 const response = await axios.get('{{ route('api.products.imageGallery', ':id') }}'.replace(':id', productId));
