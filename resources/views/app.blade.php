@@ -208,26 +208,38 @@
                 <i class="fa-solid fa-chart-line"></i>
                 <span>Dashboard</span>
             </a>
-        </li><!-- End Dashboard Nav -->
+        </li>
         <li class="nav-heading">Usuarios</li>
         <li class="nav-item">
             <a class="nav-link collapsed" href="{{ route('users.index') }}">
                 <i class="fa-solid fa-users"></i>
                 <span>Usuarios</span>
             </a>
-        </li><!-- End Profile Page Nav -->
+        </li>
         <li class="nav-item">
             <a class="nav-link collapsed" href="{{ route('products.index') }}">
                 <i class="fa-solid fa-list-ul"></i>
                 <span>Productos</span>
             </a>
-        </li><!-- End Profile Page Nav -->
+        </li>
+        <li class="nav-item">
+            <a class="nav-link collapsed" href="{{ route('purchases.index') }}">
+                <i class="fa-sharp fa-solid fa-truck"></i>
+                <span>Compras</span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link collapsed" href="{{ route('sales.index') }}">
+                <i class="fa-solid fa-cart-shopping"></i>
+                <span>Pedidos</span>
+            </a>
+        </li><!-- End Settings Page Nav -->
         <li class="nav-item">
             <a class="nav-link collapsed" href="{{ route('settings.index') }}">
                 <i class="fa-sharp fa-solid fa-gear"></i>
-                <span>Configuracion</span>
+                <span>Configuración</span>
             </a>
-        </li><!-- End Settings Page Nav -->
+        </li>
     </ul>
 
 </aside><!-- End Sidebar-->

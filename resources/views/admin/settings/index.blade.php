@@ -129,7 +129,7 @@
                     document.getElementById('form-edit').querySelector('#key').value = setting.key;
                     document.getElementById('form-edit').querySelector('#name').value = setting.name;
                     document.getElementById('form-edit').querySelector('#value').value = setting.value;
-                    document.getElementById('form-edit').setAttribute('action', '/admin/setting/' + id)
+                    document.getElementById('form-edit').setAttribute('action', '/admin/settings/' + id)
                 })
                 .catch(function (error) {
                     showAlert('error', error.data.message)

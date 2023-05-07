@@ -1,10 +1,10 @@
 @extends('app')
 @section('content')
     <div class="pagetitle">
-        <h1>Usuarios</h1>
+        <h1>Compras</h1>
         <nav>
             <ol class="breadcrumb">
-                <li class="breadcrumb-item">Usuarios</li>
+                <li class="breadcrumb-item">Compras</li>
                 <li class="breadcrumb-item active">Lista</li>
             </ol>
         </nav>
@@ -15,16 +15,14 @@
                 <button onclick="showCreate()" class="btn btn-primary rounded-3"><i class="fa-solid fa-plus"></i> Crear
                 </button>
             </div>
-            <table id="users-table" class="table table-bordered">
+            <table id="purchases-table" class="table table-bordered">
                 <thead>
                 <tr>
                     <th scope="col">#</th>
-                    <th scope="col">Nombre</th>
-                    <th scope="col">Correo</th>
-                    <th scope="col">Dirección</th>
-                    <th scope="col">Teléfono</th>
-                    <th scope="col">Tipo</th>
-                    <th scope="col">Número de Cuenta</th>
+                    <th scope="col">Descripción</th>
+                    <th scope="col">Precio</th>
+                    <th scope="col">Peso</th>
+                    <th scope="col">Usuario</th>
                     <th scope="col">Acciones</th>
                 </tr>
                 </thead>
@@ -41,9 +39,9 @@
                     <button type="button" class="btn fw-bold" data-bs-dismiss="modal" aria-label="Close">x</button>
                 </div>
                 <div class="modal-body align-content-center">
-                    <form class="row g-3 needs-validation" method="POST" action="{{ route('users.store') }}" novalidate enctype="multipart/form-data" id="form-create">
+                    <form class="row g-3 needs-validation" method="POST" action="{{ route('purchases.store') }}" novalidate enctype="multipart/form-data" id="form-create">
                         @csrf
-                        @include('admin.users.form')
+                        @include('admin.purchases.form')
                     </form>
                 </div>
                 <div class="modal-footer">
@@ -66,11 +64,11 @@
                     <form class="row g-3 needs-validation" method="POST" novalidate id="form-edit">
                         @method('PUT')
                         @csrf
-                        @include('admin.users.form')
+                        @include('admin.purchases.form')
                     </form>
                     <div id="div-picture">
                         <br>
-                        <h6 class="form-label" id="label-images">Foto de Perfil</h6>
+                        <h6 class="form-label" id="label-images">Foto</h6>
                         <form action="/" class="dropzone" id="picture">
                             @csrf
                         </form>
@@ -87,7 +85,7 @@
 @endsection
 @push('scripts')
     <script>
-        let table = $('#users-table')
+        let table = $('#purchases-table')
         table.DataTable({
             "language": {
                 "url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
@@ -98,52 +96,35 @@
             dom: 'Bfrtip',
             buttons: [{
                 extend: 'excelHtml5',
-                title: 'Usuarios',
-                filename: 'Usuarios',
+                title: 'Compras',
+                filename: 'Compras',
             }],
-            ajax: '{{ route('users.list') }}',
+            ajax: '{{ route('purchases.list') }}',
             columns: [
                 {data: 'id'},
-                {data: 'name'},
-                {data: 'email'},
-                {data: 'address'},
-                {data: 'phone'},
-                {
-                    data: 'type',
-                    render: function (type) {
-                        if (type === 1) {
-                            return '<span class="badge rounded-pill bg-success">Administrador</span>'
-                        } else if (type === 2) {
-                            return '<span class="badge rounded-pill bg-primary">Cliente</span>'
-                        } else {
-                            return '<span class="badge rounded-pill bg-dark">Proveedor</span>'
-                        }
-                    }
-                },
-                {data: 'account_number'},
+                {data: 'description'},
+                {data: 'price'},
+                {data: 'weight'},
+                {data: 'user_id'},
                 {
                     data: 'id',
                     render: function (id) {
                         return '<button onclick="showModalEdit('+id+')" type="button" class="btn  btn-sm btn-warning" title="Editar"><i class="fa-sharp fa-solid fa-pen-to-square"></i></button> '+
-                            '<button onclick="destroy('+"'"+"users/"+ id +"'"+')" type="button" class="btn  btn-sm btn-danger" title="Eliminar"><i class="fa-solid fa-trash"></i></button> '
+                            '<button onclick="destroy('+"'"+"purchases/"+ id +"'"+')" type="button" class="btn  btn-sm btn-danger" title="Eliminar"><i class="fa-solid fa-trash"></i></button> '
                     }
                 },
             ],
         });
 
         function showModalEdit(id) {
-            axios.get('/admin/users/' + id)
+            axios.get('/admin/purchases/' + id)
                 .then(function (response) {
                     let user = response.data
-                    document.getElementById('form-edit').querySelector('#name').value = user.name;
-                    document.getElementById('form-edit').querySelector('#email').value = user.email;
-                    document.getElementById('form-edit').querySelector('#address').value = user.address;
-                    document.getElementById('form-edit').querySelector('#phone').value = user.phone;
-                    document.getElementById('form-edit').querySelector('#type').value = user.type;
-                    document.getElementById('form-edit').querySelector('#account_number').value = user.account_number;
-                    document.getElementById('form-edit').setAttribute('action', '/admin/users/' + id)
-                    document.getElementById('form-edit').querySelector('#type').setAttribute('disabled', 'true')
-                    document.getElementById('form-edit').querySelector('#password').removeAttribute('required')
+                    document.getElementById('form-edit').querySelector('#description').value = user.description;
+                    document.getElementById('form-edit').querySelector('#price').value = user.price;
+                    document.getElementById('form-edit').querySelector('#weight').value = user.weight;
+                    document.getElementById('form-edit').querySelector('#user_id').value = user.user_id;
+                    document.getElementById('form-edit').setAttribute('action', '/admin/purchases/' + id)
                     dropzonePicture(id)
                 })
                 .catch(function (error) {
@@ -170,7 +151,7 @@
             new Dropzone("#picture", {
                 init: function() {
                     let myDropzone = this;
-                    let route = '/admin/user/image/' + id
+                    let route = '/admin/purchase/image/' + id
                     $.ajax({
                         type: "GET",
                         url: route,
@@ -181,7 +162,7 @@
                         }
                     });
                 },
-                url: '/admin/user/image/' + id + '?type=1',
+                url: '/admin/purchase/image/' + id + '?type=1',
                 autoProcessQueue: true,
                 paramName: "file",
                 maxFilesize: 4,
@@ -193,7 +174,7 @@
                 removedfile: function (file) {
                     $.ajax({
                         type: 'POST',
-                        url: '/admin/user-image/delete',
+                        url: '/admin/purchase-image/delete',
                         data: {name: file.name, id: id },
                         headers: {
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')

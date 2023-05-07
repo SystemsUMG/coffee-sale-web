@@ -61,21 +61,13 @@ class SettingController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      */
     public function update(Request $request, string $id)
     {
         try {
             $validate = $request->validate([
-                'settings_key' => ['required'],
+                'key' => ['required'],
                 'name' => ['required', 'string'],
                 'value' => ['required', 'string'],
             ]);
@@ -83,7 +75,7 @@ class SettingController extends Controller
             $setting->update($validate);
             $this->response_type = 'success';
             $this->message = 'Se ha actualizado la configuracion';
-        } catch (Exception $exception) {
+        } catch (\Exception $exception) {
             $this->message = $exception->getMessage();
         }
         return redirect()->back()->with($this->response_type, $this->message);

@@ -38,6 +38,7 @@
     <select name="type" class="form-select" id="type" required>
         <option value="1">Administrador</option>
         <option value="2">Cliente</option>
+        <option value="3">Proveedor</option>
     </select>
     <div class="invalid-feedback">
         Campo obligatorio.
@@ -49,8 +50,4 @@
     <div class="invalid-feedback">
         Campo numérico.
     </div>
-</div>
-<div class="col-md-6">
-    <h6 class="form-label">Foto de Perfil</h6>
-    <input name="profile_picture" type="file" class="form-control" id="profile_picture">
 </div>
