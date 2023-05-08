@@ -71,6 +71,8 @@ Route::middleware('auth')->group(function () {
         Route::controller(SaleController::class)->group(function () {
             Route::resource('sales', SaleController::class);
             Route::get('sales-list', 'listSales')->name('sales.list');
+            Route::get('tracking', 'tracking')->name('tracking');
+            Route::post('update-tracking/{sale}', 'updateTracking');
         });
 
         //Sale Details
