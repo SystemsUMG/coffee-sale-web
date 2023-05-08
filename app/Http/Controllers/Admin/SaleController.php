@@ -33,7 +33,7 @@ class SaleController extends Controller
                 'customer' => $sale->customer->name,
                 'amount' => 'Q.'.$sale->amount_paid,
                 'status' => $this->statuses()[$sale->status] ?? 'Indefinido',
-                'paid_type' => $this->payment_types[$sale->payment_type],
+                'paid_type' => $this->payment_types[$sale->payment_type] ?? 'Indefinido',
                 'transaction_number' => $sale->transaction_number,
                 'date' => Carbon::parse($sale->created_at)->format('d/m/Y h:i A'),
             ];
