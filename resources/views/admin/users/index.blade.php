@@ -141,6 +141,7 @@
                     document.getElementById('form-edit').querySelector('#phone').value = user.phone;
                     document.getElementById('form-edit').querySelector('#type').value = user.type;
                     document.getElementById('form-edit').querySelector('#account_number').value = user.account_number;
+                    document.getElementById('form-edit').querySelector('#nit').value = user.nit;
                     document.getElementById('form-edit').setAttribute('action', '/admin/users/' + id)
                     document.getElementById('form-edit').querySelector('#type').setAttribute('disabled', 'true')
                     document.getElementById('form-edit').querySelector('#password').removeAttribute('required')

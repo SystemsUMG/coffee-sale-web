@@ -41,7 +41,8 @@ class UserController extends Controller
                 'address'  => 'required|string',
                 'phone'    => 'required',
                 'type'     => 'required',
-                'account_number'  => 'numeric',
+                'account_number'  => 'nullable|numeric',
+                'nit'      => 'nullable|numeric|min_digits:6|max_digits:9',
             ]);
             $validate['password'] = Hash::make($request->password);
             User::create($validate);
@@ -73,7 +74,8 @@ class UserController extends Controller
                 'email'    => 'required|email|unique:users,email,'.$id,
                 'address'  => 'required|string',
                 'phone'    => 'required',
-                'account_number'  => 'numeric',
+                'account_number'  => 'nullable|numeric',
+                'nit'      => 'nullable|numeric|min_digits:6|max_digits:9',
             ]);
             $validate['password'] = Hash::make($request->password);
             $user = User::find($id);
