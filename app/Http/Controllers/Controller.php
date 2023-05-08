@@ -80,4 +80,14 @@ class Controller extends BaseController
             6 => '<i class="fa-solid fa-circle-arrow-left"></i> Recibido Devolución'
         ];
     }
+
+    public function updateStatus(object $sale, int $status)
+    {
+        $status_log = collect(json_decode($sale->tracking));
+        $status_log[$status] = date('Y-m-d H:i:s');
+        $sale->status = $status;
+        $sale->tracking = json_encode($status_log);
+        $sale->save();
+        return response(null);
+    }
 }

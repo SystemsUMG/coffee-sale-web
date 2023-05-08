@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Sale;
 use App\Models\SaleDetail;
 use Illuminate\Http\Request;
 
@@ -13,9 +14,9 @@ class SaleDetailController extends Controller
      */
     public function index(Request $request)
     {
-        $details = SaleDetail::where('sale_id', $request->sale_id)->get();
+        $sale = Sale::find($request->sale_id);
         $response = [];
-        foreach ($details as $detail)
+        foreach ($sale->sale_details as $detail)
         {
             $response[] = [
                 'product'   => $detail->product->name,
@@ -25,19 +26,11 @@ class SaleDetailController extends Controller
             ];
         }
         $this->response = [
-            'recordsTotal'    => count($response),
+            ''    => count($response),
             'recordsFiltered' => count($response),
             'data'            => $response,
         ];
         return response()->json($this->response);
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
     }
 
     /**
