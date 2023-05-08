@@ -34,7 +34,7 @@
 @endpush
 
 @section('content')
-    <div class="row">
+    <div class="row text-dark">
         <div class="bg-image col-md-8">
             <div class="content p-5 h-100">
                 <div class="row">
@@ -54,7 +54,8 @@
                         <label for="exampleInputEmail1" class="form-label">Correo Electrónico</label>
                         <input type="email" class="form-control" id="exampleInputEmail1"
                                aria-describedby="emailHelp">
-                        <div id="emailHelp" class="form-text"> Nunca compartiremos tú correo electrónico con nadie
+                        <div id="emailHelp" class="text-dark fw-light"> Nunca compartiremos tú correo electrónico con
+                            nadie
                             más.
                         </div>
                     </div>
@@ -62,8 +63,9 @@
                         <label for="exampleInputMessage" class="form-label">Mensaje</label>
                         <textarea id="exampleInputMessage" class="form-control" rows="3"></textarea>
                     </div>
-
-                    <button type="submit" class="btn btn-primary">Enviar</button>
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-dark">Enviar</button>
+                    </div>
                 </div>
             </form>
         </div>
