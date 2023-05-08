@@ -36,9 +36,7 @@
 
 <div class="bg-body">
     @include('frontend.components.navbar')
-    <div class="mt-5 pt-5">
-        @yield('content')
-    </div>
+    @yield('content')
     @include('frontend.components.footer')
 </div>
 

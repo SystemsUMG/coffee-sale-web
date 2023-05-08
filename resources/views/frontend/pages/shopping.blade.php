@@ -2,49 +2,49 @@
 @push('styles')
     <style>
         .header {
-            margin-top: 5rem;
-            height: 73vh;
+            margin-top: 3rem;
+            height: 88vh;
         }
-
         .img-header {
             width: 40rem;
         }
-
         .bg-moss-green {
             background: #14261C;
         }
-
         .bg-green-gray {
             background: #48514C;
         }
 
+        @media (min-width: 1920px) {
+            .header {
+                margin-top: 2rem;
+            }
+        }
+
         @media (max-width: 1250px) {
             .img-header {
-                width: 24rem;
+                width: 35rem;
             }
             .header {
-                margin-top: 0;
-                height: 100vh;
+                margin-top: 2rem;
+                height: 90vh;
             }
         }
 
         @media (max-width: 820px) {
-            .header {
-                margin-top: 0;
-                height: 100%;
+            .img-header {
+                width: 21rem;
             }
-        }
-
-        @media (min-width: 1920px) {
             .header {
-                margin-top: 8rem;
+                margin-top: 4rem;
+                height: 100%;
             }
         }
     </style>
 @endpush
 
 @section('content')
-    <div class="container header">
+    <div class="container header d-flex align-items-center">
         <div class="row">
             <div class="col-sm-6">
                 <img
@@ -52,9 +52,9 @@
                     class="img-header"
                     alt="">
             </div>
-            <div class="col-sm-6 text-start p-5 p-sm-3">
+            <div class="col-sm-6 text-start p-sm-3">
                 <div class="row">
-                    <p class="fw-bold">
+                    <p class="fs-5 fw-bold">
                         Productos de la mejor calidad
                     </p>
                     <p class="display-3 fw-bold">
