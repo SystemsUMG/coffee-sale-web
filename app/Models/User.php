@@ -31,6 +31,7 @@ class User extends Authenticatable
         'phone',
         'type',
         'account_number',
+        'nit',
     ];
 
     /**

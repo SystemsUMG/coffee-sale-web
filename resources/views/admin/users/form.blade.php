@@ -28,7 +28,7 @@
 </div>
 <div class="col-md-4">
     <h6 class="form-label">Teléfono</h6>
-    <input name="phone" type="text" class="form-control" id="phone" required>
+    <input name="phone" type="text" minlength="8" maxlength="8" class="form-control" id="phone" required>
     <div class="invalid-feedback">
         Campo obligatorio.
     </div>
@@ -47,6 +47,13 @@
 <div class="col-md-4">
     <h6 class="form-label">Número de Cuenta</h6>
     <input name="account_number" type="number" class="form-control" id="account_number">
+    <div class="invalid-feedback">
+        Campo numérico.
+    </div>
+</div>
+<div class="col-md-4">
+    <h6 class="form-label">NIT</h6>
+    <input name="nit" type="number" minlength="6" maxlength="9" class="form-control" id="nit">
     <div class="invalid-feedback">
         Campo numérico.
     </div>
