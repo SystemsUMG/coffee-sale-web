@@ -58,6 +58,41 @@
             </div>
         </div>
     </div>
+
+    {{-- Modal Tracking --}}
+    <div class="modal fade " id="modal-tracking" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content rounded-3 px-4 py-2">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modal-title-tracking">Detalle de tracking</h5>
+                    <button type="button" class="btn fw-bold" data-bs-dismiss="modal" aria-label="Close">x</button>
+                </div>
+                <div class="modal-body align-content-center dashboard">
+                    <div class="activity" id="tracking">
+                    </div>
+                    <br>
+                    <form class="row g-3 needs-validation" method="POST" novalidate enctype="multipart/form-data" id="form-tracking">
+                        @csrf
+                        <div class="col-md-4">
+                            <h6 class="form-label">Actualizar tracking</h6>
+                            <select name="status" class="form-select" id="status" required>
+                                @foreach($statuses as $key => $status)
+                                    <option value="{{ $key }}">{!! $status !!}</option>
+                                @endforeach
+                            </select>
+                            <div class="invalid-feedback">
+                                Campo obligatorio.
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-cancel rounded-3" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-submit rounded-3" form="form-tracking">Actualizar</button>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
 @push('scripts')
     <script>
@@ -67,6 +102,7 @@
                 "url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
             },
             destroy: true,
+            order: [[0, "desc"]],
             responsive: true,
             serverSide: true,
             dom: 'Bfrtip',
@@ -87,7 +123,7 @@
                 {
                     data: 'id',
                     render: function (id) {
-                        return '<button onclick="showModalEdit('+id+')" type="button" class="btn  btn-sm btn-success" title="Track"><i class="fa-solid fa-truck-fast"></i></button> '+
+                        return '<button onclick="tracking('+id+')" type="button" class="btn  btn-sm btn-success" title="Track"><i class="fa-solid fa-truck-fast"></i></button> '+
                             '<button onclick="saleDetail('+ id +')" type="button" class="btn  btn-sm btn-outline-primary" title="Detalle pedido"><i class="fa-solid fa-eye"></i></button> '
                     }
                 },
@@ -106,7 +142,7 @@
                             '<td>'+ value.product +'</td>'+
                             '<td>'+ value.amount +'</td>'+
                             '<td>'+ value.price +'</td>'+
-                            '<td>'+ value.subtotal +'</td>'+
+                            '<td>'+ value.subtotal.toFixed(2) +'</td>'+
                         '</tr>')
                         total += value.subtotal
                     })
@@ -116,6 +152,40 @@
                     showAlert('error', error.data.message)
                 })
             let modal = new bootstrap.Modal(document.getElementById('modal-sale-details'), {
+                keyboard: false
+            })
+            modal.show()
+        }
+
+        function tracking(id) {
+            let div_tracking = $('#tracking')
+            let label_tracking = $('#modal-title-tracking')
+            let status = document.getElementById('status')
+            axios.get('{{ route('tracking') }}?sale_id='+id)
+                .then(function (response) {
+                    console.log(response)
+                    div_tracking.empty()
+                    label_tracking.empty()
+                    status.value = response.data.status
+                    label_tracking.html('Tracking de pedido #'+response.data.sale_id)
+                    $.each(response.data.tracking, function (key, value) {
+                        div_tracking.append('' +
+                            '<div class="activity-item d-flex">'+
+                                '<div class="activite-label">'+ value.date +' &nbsp;</div>'+
+                                '<i class="bi bi-circle-fill activity-badge text-success align-self-start"></i>'+
+                                '<div class="activity-content">'+
+                                    ''+ value.icon +''+
+                                '</div>'+
+                            '</div>'
+                        )
+                    })
+                })
+                .catch(function (error) {
+                    showAlert('error', 'Ha ocurrido un error')
+                })
+            document.getElementById('form-tracking').setAttribute('action', '/admin/update-tracking/' + id)
+
+            let modal = new bootstrap.Modal(document.getElementById('modal-tracking'), {
                 keyboard: false
             })
             modal.show()
