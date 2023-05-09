@@ -74,7 +74,7 @@ class SaleController extends Controller
 
     public function updateTracking(Sale $sale, Request $request)
     {
-        $this->updateStatus($sale, $request->status, null);
+        $this->updateStatus($sale, $request->status);
         return back()->with('success', 'Estado actualizado');
     }
     /**

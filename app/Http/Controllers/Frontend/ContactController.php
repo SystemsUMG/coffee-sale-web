@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
+use App\Mail\ContactEmail;
 use App\Models\Setting;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class ContactController extends Controller
 {
@@ -69,5 +71,21 @@ class ContactController extends Controller
         return view('frontend.pages.contact', [
             'settings' => $settings
         ]);
+    }
+
+    public function sendEmail(Request $request)
+    {
+        $validate = $request->validate([
+            'email' => 'required|email',
+            'message' => 'required|string',
+        ]);
+        try {
+            $email = new ContactEmail($validate);
+            Mail::to($request->email)->send($email);
+
+            return redirect()->back()->with('success', 'Mensaje Enviado');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', $e);
+        }
     }
 }

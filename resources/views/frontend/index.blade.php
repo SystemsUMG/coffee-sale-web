@@ -35,10 +35,68 @@
 <body>
 
 <div class="bg-body">
-    @include('frontend.components.navbar')
+    @include('frontend.layouts.navbar')
     @yield('content')
-    @include('frontend.components.footer')
+    @include('frontend.layouts.footer')
 </div>
+
+
+@if(session('success'))
+    <div class="toast-container position-fixed bottom-0 end-0 p-3">
+        <div class="toast bg-success-subtle" role="alert" aria-live="assertive" aria-atomic="true" data-delay="5000">
+            <div class="toast-header">
+                <strong class="me-auto"><i class="bi bi-check-circle-fill text-success fs-3 me-2"></i><span>Éxito</span></strong>
+                <small>{{ date('H:i:s') }}</small>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body">
+                <strong class="mr-auto"> {{ session('success') }}</strong>
+            </div>
+        </div>
+    </div>
+@endif
+
+@if(session('warning'))
+    <div class="toast-container position-fixed bottom-0 end-0 p-3">
+        <div class="toast bg-danger-subtle" role="alert" aria-live="assertive" aria-atomic="true" data-delay="5000">
+            <div class="toast-header">
+                <strong class="me-auto"><i class="bi bi-exclamation-circle-fill text-warning fs-3 me-2"></i><span>Ha ocurrido algo inesperado</span></strong>
+                <small>{{ date('H:i:s') }}</small>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body">
+                <strong class="mr-auto"> {{ session('warning') }}</strong>
+            </div>
+        </div>
+    </div>
+@endif
+
+@if(session('error'))
+    <div class="toast-container position-fixed bottom-0 end-0 p-3">
+        <div class="toast bg-danger-subtle" role="alert" aria-live="assertive" aria-atomic="true" data-delay="5000">
+            <div class="toast-header">
+                <strong class="me-auto"><i
+                        class="bi bi-x-circle-fill text-danger fs-3 me-2"></i><span>Error</span></strong>
+                <small>{{ date('H:i:s') }}</small>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body">
+                <strong class="mr-auto"> {{ session('error') }}</strong>
+            </div>
+        </div>
+    </div>
+@endif
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const toastElList = [].slice.call(document.querySelectorAll('.toast'))
+        const toastList = toastElList.map(function (toastEl) {
+            return new bootstrap.Toast(toastEl)
+        });
+        toastList.forEach(toast => toast.show());
+    });
+
+</script>
 
 <!-- Swiper -->
 <script src="{{ asset('assets/js/frontend/swiper-bundle.min.js') }}"></script>
