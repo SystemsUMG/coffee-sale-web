@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ProductRequest;
+use App\Http\Resources\Product\ImageGaleryResource;
 use App\Models\Image;
 use App\Models\Product;
 use Illuminate\Http\JsonResponse;
@@ -98,6 +99,11 @@ class ProductController extends Controller
             ];
         }
         return response()->json($this->response, $this->status_code);
+    }
+
+    public function imageGallery(Product $product)
+    {
+        return ImageGaleryResource::collection($product->images->where('type', 2));
     }
 
     public function images(Request $request, Product $product)

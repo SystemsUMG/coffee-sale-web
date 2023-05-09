@@ -26,6 +26,7 @@ use Illuminate\Support\Facades\Route;
 //shopping
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/contact', [ContactController::class, 'index'])->name('contact.index');
+Route::get('products/{product}/image-gallery', [ProductController::class, 'imageGallery'])->name('products.imageGallery');
 
 Route::controller(AuthController::class)->middleware('guest')->prefix('/')->group(function () {
     //login
@@ -78,4 +79,6 @@ Route::middleware('auth')->group(function () {
         //Sale Details
         Route::resource('sale-details', SaleDetailController::class);
     });
+    //Sales Customers
+    Route::apiResource('sales', \App\Http\Controllers\Frontend\SaleController::class);
 });

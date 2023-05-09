@@ -211,7 +211,7 @@
 
         async function getImageGallery(productId) {
             try {
-                const response = await axios.get('{{ route('api.products.imageGallery', ':id') }}'.replace(':id', productId));
+                const response = await axios.get('{{ route('products.imageGallery', ':id') }}'.replace(':id', productId));
                 const data = response.data.data
                 containerImages.innerHTML = ''
                 const fragment = document.createDocumentFragment()
