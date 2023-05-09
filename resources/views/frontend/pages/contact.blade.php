@@ -34,6 +34,7 @@
 @endpush
 
 @section('content')
+
     <div class="row text-dark">
         <div class="bg-image col-md-8">
             <div class="content p-5 h-100">
@@ -48,23 +49,27 @@
             </div>
         </div>
         <div class="col-md-4 p-0">
-            <form class="rounded-0 border-0 bg-warning p-5 d-flex align-items-center" style="height: 92vh;">
+            <form method="POST" action="{{route('contact.send-email')}}"
+                  class="rounded-0 border-0 bg-warning p-5 d-flex align-items-center" style="height: 92vh;">
+                @csrf
                 <div class="container">
                     <div class="mb-3">
-                        <label for="exampleInputEmail1" class="form-label">Correo Electrónico</label>
-                        <input type="email" class="form-control" id="exampleInputEmail1"
-                               aria-describedby="emailHelp">
-                        <div id="emailHelp" class="text-dark fw-light"> Nunca compartiremos tú correo electrónico con
-                            nadie
-                            más.
-                        </div>
-                    </div>
-                    <div class="mb-3">
-                        <label for="exampleInputMessage" class="form-label">Mensaje</label>
-                        <textarea id="exampleInputMessage" class="form-control" rows="3"></textarea>
+                        <x-inputs.group>
+                            <x-inputs.email
+                                name="email"
+                                label="Correo Electrónico"
+                            />
+                            <div id="emailHelp" class="text-dark fw-light">
+                                Nunca compartiremos tú correo electrónico con nadie más.
+                            </div>
+                            <x-inputs.textarea
+                                name="message"
+                                label="Mensaje"
+                            />
+                        </x-inputs.group>
                     </div>
                     <div class="d-grid gap-2">
-                        <button type="submit" class="btn btn-dark">Enviar</button>
+                        <button type="submit" class="btn btn-success">Enviar</button>
                     </div>
                 </div>
             </form>
