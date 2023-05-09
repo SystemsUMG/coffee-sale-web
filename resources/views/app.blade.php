@@ -229,7 +229,7 @@
             </a>
         </li>
         <li class="nav-item">
-            <a class="nav-link collapsed" href="{{ route('sales.index') }}">
+            <a class="nav-link collapsed" href="/admin/sales">
                 <i class="fa-solid fa-cart-shopping"></i>
                 <span>Pedidos</span>
             </a>
