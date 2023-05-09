@@ -85,5 +85,5 @@ Route::middleware('auth')->group(function () {
     });
 
     //Sales Customers
-    Route::apiResource('sales', \App\Http\Controllers\Frontend\SaleController::class);
+    Route::apiResource('api-sales', \App\Http\Controllers\Frontend\SaleController::class);
 });
