@@ -75,7 +75,7 @@
                     @forelse($settings as $setting)
                         <div class="col-sm-4">
                             <div class="card m-1">
-                                {!! $setting['icon'] !!}
+                                {!! $setting['icon'] ?? '' !!}
                                 <div class="card-body">
                                     <h5 class="card-title"></h5>
                                     <ul class="text-center list-group">
