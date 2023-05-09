@@ -85,6 +85,8 @@
             4 : 'Tiktok',
             5 : 'Email',
             6 : 'Telefono',
+            7 : 'Nit',
+            8 : 'Direccion',
         }
         table.DataTable({
             "language": {

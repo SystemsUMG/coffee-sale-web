@@ -3,11 +3,18 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Mail\BillingEmail;
 use App\Models\Product;
 use App\Models\Sale;
+use App\Models\Setting;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
+use Mail;
+use Str;
 
 class SaleController extends Controller
 {
@@ -105,7 +112,7 @@ class SaleController extends Controller
             DB::commit();
             $this->message = 'Se ha generado tu pedido correctamente';
             $this->status_code = 200;
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             DB::rollBack();
             $this->message = $exception->getMessage();
             $this->status_code = 500;
@@ -138,5 +145,61 @@ class SaleController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    /**
+     * Generar factura y enviar correo
+     */
+    public function billing(Sale $sale)
+    {
+        try {
+            if ($sale->authorization_number == null) {
+                $sale->authorization_number = strtoupper(Str::random(15));
+                $sale->save();
+
+                $settings = Setting::whereBetween('key', [6, 8])->get();
+                // Agrupar los resultados por clave 'key'
+                $groupedSettings = $settings->groupBy('key');
+                // Asignar los valores a las variables correspondientes
+                $phone   = $groupedSettings[6][0]->value ?? '';
+                $nit     = $groupedSettings[7][0]->value ?? '';
+                $address = $groupedSettings[8][0]->value ?? '';
+
+                $pdf = Pdf::loadView('admin.sales.bill', compact('sale', 'phone', 'nit', 'address'));
+                $name = $this->saveBill($pdf, $sale);
+
+                //URL para descarga en boton
+                $file = $sale->bill()->first();
+                $url = asset(Storage::url($file->url));
+                $sale->url = $url;
+
+                //Enviar correo
+                $mail = new BillingEmail($sale, $name);
+                Mail::to($sale->customer->email)->send($mail);
+
+                return back()->with('success', 'Factura enviada');
+            } else {
+                return back()->with('error', 'La factura ya fue generada');
+            }
+
+        } catch (Exception $e) {
+            return back()->with('error', 'No fue posible generar la factura');
+        }
+    }
+
+    /**
+     * Almacenar factura
+     */
+    public function saveBill($file, Sale $sale) : String
+    {
+        $name = "$sale->authorization_number.pdf";
+        $file->save(storage_path("app/public/bills/$name"));
+
+        $sale->bill()->create([
+            'url'  => "bills/$name",
+            'type' => 1
+        ]);
+
+        return "storage/bills/$name";
     }
 }

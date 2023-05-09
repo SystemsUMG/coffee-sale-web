@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Sale;
 use App\Models\SaleDetail;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class SaleDetailController extends Controller
 {
@@ -15,6 +16,13 @@ class SaleDetailController extends Controller
     public function index(Request $request)
     {
         $sale = Sale::find($request->sale_id);
+
+        $file = $sale->bill()->first();
+        if ($file) {
+            $url = Storage::disk('public')->url($file->url);
+            $sale->url = $url;
+        }
+
         $response = [];
         foreach ($sale->sale_details as $detail)
         {
@@ -29,6 +37,7 @@ class SaleDetailController extends Controller
             ''    => count($response),
             'recordsFiltered' => count($response),
             'data'            => $response,
+            'sale'            => $sale
         ];
         return response()->json($this->response);
     }
