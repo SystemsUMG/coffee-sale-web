@@ -17,7 +17,7 @@
             background-image: url('{{ asset('assets/img/covers/cover-contact.jpg') }}');
             background-size: cover;
             background-position: center;
-            filter: blur(3px) brightness(0.5);
+            filter: blur(5px) brightness(0.5);
         }
 
         .content {
@@ -70,17 +70,17 @@
             </form>
         </div>
         <div class="container mt-5">
-            <div class="card col-md-7 mx-auto mt-3 shadow-sm p-4">
+            <div class="card col-md-7 mx-auto mt-3 shadow-sm p-3">
                 <div class="card-group">
                     @forelse($settings as $setting)
                         <div class="col-sm-4">
-                            <div class="card m-1">
+                            <div class="card m-3">
                                 {!! $setting['icon'] !!}
-                                <div class="card-body">
+                                <div class="card-body pt-0">
                                     <h5 class="card-title"></h5>
                                     <ul class="text-center list-group">
                                         @foreach($setting['links'] as $link)
-                                            <li class="list-group-item border-0">
+                                            <li class="list-group-item border-0 p-0 m-0">
                                                 @if ($link['url'])
                                                     @if (!Str::startsWith($link['url'], 'https://') && !Str::startsWith($link['url'], 'http://'))
                                                         <a href="{{ "https://".$link['url'] }}" target="_blank"
