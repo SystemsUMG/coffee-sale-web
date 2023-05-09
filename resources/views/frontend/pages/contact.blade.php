@@ -77,6 +77,9 @@
                             <div class="card m-3">
                                 {!! $setting['icon'] !!}
                                 <div class="card-body pt-0">
+                            <div class="card m-1">
+                                {!! $setting['icon'] ?? '' !!}
+                                <div class="card-body">
                                     <h5 class="card-title"></h5>
                                     <ul class="text-center list-group">
                                         @foreach($setting['links'] as $link)
