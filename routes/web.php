@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Frontend\ContactController;
 use App\Http\Controllers\Frontend\HomeController;
+use App\Http\Controllers\Frontend\ShoppingCartController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -23,7 +24,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-//shopping
+/*  ============================  shopping   ============================    */
 Route::controller(HomeController::class)->group(function () {
     Route::get('', 'index')->name('home');
     Route::post('api/product-calculation', 'productCalculation')->name('products.calculation');
@@ -33,6 +34,8 @@ Route::controller(ContactController::class)->prefix('contact')->group(function (
     Route::post('/send-email', 'sendEmail')->name('contact.send-email');
 });
 Route::get('products/{product}/image-gallery', [ProductController::class, 'imageGallery'])->name('products.imageGallery');
+Route::get('shopping-cart', [ShoppingCartController::class, 'index'])->name('shopping.cart');
+/*  =====================================================================    */
 
 Route::controller(AuthController::class)->middleware('guest')->group(function () {
     //login

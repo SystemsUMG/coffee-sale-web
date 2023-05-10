@@ -55,7 +55,7 @@
                     </li>
                     <li class="nav-item">
                         <div class="nav-link">
-                            <a class="position-relative text-success">
+                            <a href="{{ route('shopping.cart') }}" class="position-relative text-success">
                                 <i class="bi bi-bag-fill"></i>
                                 <span id="cart-count"
                                       class="position-absolute top-0 start-100 translate-middle badge rounded-pill text-success">0</span>

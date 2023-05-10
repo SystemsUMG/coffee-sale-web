@@ -75,7 +75,6 @@ class ContactController extends Controller
 
     public function sendEmail(Request $request)
     {
-        dd($request->all());
         $validate = $request->validate([
             'email' => 'required|email',
             'message' => 'required|string',

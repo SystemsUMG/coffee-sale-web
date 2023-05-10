@@ -93,6 +93,37 @@
         toastList.forEach(toast => toast.show());
     });
 
+
+    function updateCartCount() {
+        const products = JSON.parse(localStorage.getItem("products")) || {};
+        const totalCount = Object.values(products).reduce((acc, curr) => acc + curr.amount, 0);
+        const cartCount = document.getElementById("cart-count");
+        if (cartCount) {
+            cartCount.textContent = totalCount > 0 ? totalCount.toString()+'+' : "0";
+        }
+    }
+
+    async function productCalculation() {
+        try {
+            const response = await axios.post('{{ route('products.calculation') }}', {
+                'products': JSON.parse(localStorage.getItem("products"))
+            });
+            const total = response.data.total
+            const cartTotalPrice = document.getElementById("cart-total-price");
+            if (cartTotalPrice) {
+                cartTotalPrice.textContent = total > 0 ? total.toFixed(2) : "0.00";
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+
+    window.addEventListener('load', function () {
+        updateCartCount()
+        productCalculation();
+    });
+
 </script>
 
 @stack('scripts')
