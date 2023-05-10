@@ -29,6 +29,8 @@ class Controller extends BaseController
             4 => 'Tiktok',
             5 => 'Email',
             6 => 'Telefono',
+            7 => 'Nit',
+            8 => 'Direccion',
         ];
         $this->payment_types = [
             1 => '<i class="fa-solid fa-money-bill-1-wave"></i> Efectivo',

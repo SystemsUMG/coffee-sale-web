@@ -53,7 +53,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-cancel rounded-3" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="submit" class="btn btn-submit rounded-3">Facturar</button>
+                    <a type="submit" class="btn btn-submit rounded-3" id="billing">Facturar</a>
                 </div>
             </div>
         </div>
@@ -89,6 +89,25 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-cancel rounded-3" data-bs-dismiss="modal">Cancelar</button>
                     <button type="submit" class="btn btn-submit rounded-3" form="form-tracking">Actualizar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{-- Modal Bill --}}
+    <div class="modal fade " id="modal-bill" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content rounded-3 px-4 py-2">
+                <div class="modal-header">
+                    <h5 class="modal-title ">Factura</h5>
+                    <button type="button" class="btn fw-bold" data-bs-dismiss="modal" aria-label="Close">x</button>
+                </div>
+                <div class="modal-body align-content-center">
+                    <embed id="bill" style="width:100%; height:70vh;">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-cancel rounded-3" data-bs-dismiss="modal">Cancelar</button>
+                    <a type="submit" class="btn btn-submit rounded-3" id="show-details" onclick="hideBill()">Ver detalle</a>
                 </div>
             </div>
         </div>
@@ -130,14 +149,17 @@
             ],
         });
 
+        let modalDetails = new bootstrap.Modal(document.getElementById('modal-sale-details'), { keyboard: false })
+        let modalBill    = new bootstrap.Modal(document.getElementById('modal-bill'),         { keyboard: false })
+
         function saleDetail(id) {
             axios.get('{{ route('sale-details.index') }}?sale_id='+id)
                 .then(function (response) {
-                    let item = response.data.data
+                    let item = response.data
                     let total = 0
                     let tableDetails = $('#sales-details-table tbody')
                     tableDetails.empty()
-                    $.each(item, function (key, value) {
+                    $.each(item.data, function (key, value) {
                         tableDetails.append('<tr> '+
                             '<td>'+ value.product +'</td>'+
                             '<td>'+ value.amount +'</td>'+
@@ -147,14 +169,35 @@
                         total += value.subtotal
                     })
                     $('#total').html('Total: Q.'+total.toFixed(2))
+
+                    //Boton facturar o ver factura
+                    let billing = $('#modal-sale-details #billing')
+                    if (!item.sale.authorization_number) {
+                        billing.attr('href', '/admin/billing/'+id)
+                        billing.text('Facturar')
+                        billing.off('click');
+                    } else {
+                        billing.removeAttr('href')
+                        billing.text('Ver factura')
+                        billing.click(showBill)
+                        $("#modal-bill #bill").attr('src', 'https://drive.google.com/viewerng/viewer?embedded=true&url='+item.sale.url)
+                    }
+
+                    modalDetails.show()
                 })
                 .catch(function (error) {
-                    showAlert('error', error.data.message)
+                    showAlert('error', error.message)
                 })
-            let modal = new bootstrap.Modal(document.getElementById('modal-sale-details'), {
-                keyboard: false
-            })
-            modal.show()
+        }
+
+        function showBill() {
+            modalDetails.hide()
+            modalBill.show()
+        }
+
+        function hideBill() {
+            modalDetails.show()
+            modalBill.hide()
         }
 
         function tracking(id) {
@@ -163,7 +206,6 @@
             let status = document.getElementById('status')
             axios.get('{{ route('tracking') }}?sale_id='+id)
                 .then(function (response) {
-                    console.log(response)
                     div_tracking.empty()
                     label_tracking.empty()
                     status.value = response.data.status
@@ -190,5 +232,6 @@
             })
             modal.show()
         }
+
     </script>
 @endpush

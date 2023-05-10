@@ -80,6 +80,7 @@ Route::middleware('auth')->group(function () {
             Route::get('sales-list', 'listSales')->name('sales.list');
             Route::get('tracking', 'tracking')->name('tracking');
             Route::post('update-tracking/{sale}', 'updateTracking');
+            Route::get('billing/{sale}', 'billing')->name('billing');
         });
 
         //Sale Details

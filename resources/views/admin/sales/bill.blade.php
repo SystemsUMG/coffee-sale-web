@@ -37,8 +37,8 @@
             width: 45%;
         }
         .details-container .details-sale {
-            margin-left: 5%;
-            width: 49%;
+            margin-left: 4%;
+            width: 50%;
             display: inline-block;
             text-align: right;
         }
@@ -76,8 +76,6 @@
             text-align: center;
             margin-top: 5em;
         }
-
-
     </style>
 </head>
 <body>
@@ -86,9 +84,9 @@
     <div class="header-container">
         <div class="information">
             <h1>Cafetenango</h1>
-            <p>Nit: 2465794</p>
-            <p>Colonia el Tanque, Acatenango</p>
-            <p>Local 312</p>
+            <p>Nit: {{ $nit }}</p>
+            <p>{{ $address }}</p>
+            <p>Teléfono: {{ $phone }}</p>
         </div>
         <div class="logo">
             <img src="{{ public_path('assets/img/logo.png') }}" height="200px"/>
@@ -97,63 +95,56 @@
     <hr />
     <div class="details-container">
         <div class="details-client">
-            <p>Nombre: <span>Yandy José Lima Pérez</span></p>
-            <p>NIT: <span>21349979</span></p>
-            <p>Dirección: <span>32719 Maryse Freeway Suite 820 West Davidhaven, CA 00125-1673</span></p>
+            <p>Nombre: <span>{{ $sale->customer->name }}</span></p>
+            <p>NIT: <span>{{ $sale->customer->nit ?? 'CF' }}</span></p>
+            <p>Dirección: <span>{{ $sale->customer->address }}</span></p>
         </div>
         <div class="details-sale">
-            <p>N° de factura: <span>2343</span></p>
-            <p>N° de Autorización: <span>2FWFLAJSDLKQJR3</span></p>
+            <p>N° de Factura: <span>{{ $sale->id }}</span></p>
+            <p>N° de Autorización: <span>{{ $sale->authorization_number }}</span></p>
             <p>Serie: <span>D</span></p>
-            <p>Fecha de Emisión: <span>2023-05-08 04:27:37</span></p>
+            <p>Fecha de Emisión: <span>{{ $sale->updated_at }}</span></p>
         </div>
     </div>
     <div class="sales-container">
         <table class="sales-table">
             <thead>
-            <tr>
-                <th>Cantidad</th>
-                <th>Descripción</th>
-                <th>Precio Unitario</th>
-                <th>Subtotal</th>
-            </tr>
+                <tr>
+                    <th>Cantidad</th>
+                    <th>Descripción</th>
+                    <th>Precio Unitario</th>
+                    <th>Subtotal</th>
+                </tr>
             </thead>
             <tbody>
-            <tr>
-                <td>10</td>
-                <td>Libra Café Molido</td>
-                <td>40.00</td>
-                <td>400.00</td>
-            </tr>
-            <tr>
-                <td>5</td>
-                <td>Libra Café Tostado</td>
-                <td>45.00</td>
-                <td>225.00</td>
-            </tr>
-            <tr>
-                <td>1</td>
-                <td>Libra Café Tostado Molido</td>
-                <td>100.00</td>
-                <td>100.00</td>
-            </tr>
+            @php $total = 0; @endphp
+            @foreach($sale->sale_details as $detail)
+                @php
+                    $subtotal = $detail->product->price * $detail->amount;
+                    $total += $subtotal;
+                @endphp
+                <tr>
+                    <td>{{ $detail->amount }}</td>
+                    <td>{{ $detail->product->name }}</td>
+                    <td>Q{{ $detail->product->price }}</td>
+                    <td>Q{{ $subtotal }}</td>
+                </tr>
+            @endforeach
             </tbody>
             <tfoot>
             <tr>
                 <th></th>
                 <th></th>
                 <th>Total Factura</th>
-                <th>Q1,250.00</th>
+                <th>Q{{ $total }}</th>
             </tr>
             </tfoot>
         </table>
     </div>
-
     <div class="footer-container">
         <h4>Desarrollado por Grupo 6</h4>
     </div>
 </div>
-
 </body>
 </html>
 
