@@ -26,9 +26,6 @@
     <!-- Alpinejs -->
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
-    <!-- Swiper CSS -->
-    <link rel="stylesheet" href="{{ asset('assets/css/frontend/swiper-bundle.min.css') }}">
-
     @stack('styles')
 </head>
 
@@ -97,9 +94,6 @@
     });
 
 </script>
-
-<!-- Swiper -->
-<script src="{{ asset('assets/js/frontend/swiper-bundle.min.js') }}"></script>
 
 @stack('scripts')
 

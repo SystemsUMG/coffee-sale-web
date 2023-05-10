@@ -39,7 +39,8 @@
             <div class="offcanvas-body">
                 <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
                     <li class="nav-item">
-                        <a class="nav-link {{ ($isHome ? 'active' : '') }}" aria-current="page" href="{{ route('home') }}">Inicio</a>
+                        <a class="nav-link {{ ($isHome ? 'active' : '') }}" aria-current="page"
+                           href="{{ route('home') }}">Inicio</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('contact.index') }}">Contácto</a>
@@ -47,7 +48,8 @@
                     <li class="nav-item">
                         <div class="nav-link">
                             <p class="text-success">
-                                Q0.00
+                                <strong>Q</strong>
+                                <span id="cart-total-price">0.00</span>
                             </p>
                         </div>
                     </li>
@@ -55,10 +57,8 @@
                         <div class="nav-link">
                             <a class="position-relative text-success">
                                 <i class="bi bi-bag-fill"></i>
-                                <span
-                                    class="position-absolute top-0 start-100 translate-middle badge rounded-pill text-success">
-                                    2+
-                                </span>
+                                <span id="cart-count"
+                                      class="position-absolute top-0 start-100 translate-middle badge rounded-pill text-success">0</span>
                             </a>
                         </div>
                     </li>

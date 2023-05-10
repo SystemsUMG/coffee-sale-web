@@ -5,12 +5,15 @@
             margin-top: 3rem;
             height: 88vh;
         }
+
         .img-header {
             width: 40rem;
         }
+
         .bg-moss-green {
             background: #14261C;
         }
+
         .bg-green-gray {
             background: #48514C;
         }
@@ -25,6 +28,7 @@
             .img-header {
                 width: 35rem;
             }
+
             .header {
                 margin-top: 2rem;
                 height: 90vh;
@@ -35,6 +39,7 @@
             .img-header {
                 width: 21rem;
             }
+
             .header {
                 margin-top: 4rem;
                 height: 100%;
@@ -118,40 +123,38 @@
         </div>
     </div>
 
-    <div class="my-5 container py-5" id="products">
+    <div class="my-5  container" id="products">
         <h3 class="text-center display-6">Productos</h3>
-        <div class="swiper">
-            <div class="slide-content">
-                <div class="card-wrapper swiper-wrapper py-5">
-                    @foreach($products as $product)
-                        <div class="card swiper-slide text-center py-2" id="template-card-product">
-                            <div class="image-content">
-                                <div class="card-image">
-                                    <img
-                                        src="{!! Storage::disk('public')->url($product->images->where('type', 1)->first()->url ?? '') !!}"
-                                        style="width: 25%"
-                                        alt="...">
-                                </div>
-                            </div>
-                            <div class="card-content">
-                                <h3 class="card-title">{!! $product->name !!}</h3>
-                                <h5 class="card-text">Q{!! $product->price !!}</h5>
-                                <div class="btn-group" role="group">
-                                    <button class="btn">
-                                        <i class="bi bi-plus-circle-fill text-primary fs-2"></i>
-                                    </button>
-                                    <button onClick="getImageGallery({{ $product->id }})" class="btn">
-                                        <i class="bi bi-images text-secondary fs-2"></i>
-                                    </button>
-                                </div>
+        <div class="row row-cols-1 row-cols-md-3 g-4 text-center">
+            @foreach($products as $product)
+                <div class="col">
+                    <div class="card">
+                        <div>
+                            <img
+                                src="{!! Storage::disk('public')->url($product->images->where('type', 1)->first()->url ?? '') !!}"
+                                class="w-25" alt="...">
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title">{!! $product->name !!}</h5>
+                            <h5 class="card-text">Q{!! $product->price !!}</h5>
+                            <div class="btn-group" role="group">
+                                <button onClick="getImageGallery({{ $product->id }})" class="btn">
+                                    <i class="bi bi-images text-secondary fs-2"></i>
+                                </button>
+                                <button class="btn btn-remove-product" id="product-remove-{{ $product->id }}"
+                                        onClick="removeProduct({{ $product->id }})">
+                                    <i class="bi bi-dash-circle-fill text-danger fs-2"></i>
+                                </button>
+                                <button class="btn btn-add-product" id="product-{{ $product->id }}"
+                                        onClick="addProduct({{ $product->id }})">
+                                    <span class="fs-4" id="amount-{{ $product->id }}">0</span>
+                                    <i class="bi bi-plus-circle-fill text-primary fs-2"></i>
+                                </button>
                             </div>
                         </div>
-                    @endforeach
+                    </div>
                 </div>
-            </div>
-            <div class="swiper-button-next swiper-navBtn"></div>
-            <div class="swiper-button-prev swiper-navBtn"></div>
-            <div class="swiper-pagination"></div>
+            @endforeach
         </div>
 
         <div class="modal fade" id="modal-edit" tabindex="-1">
@@ -169,43 +172,12 @@
                 </div>
             </div>
         </div>
-
     </div>
 
 @endsection
 
 @push('scripts')
     <script>
-        var swiper = new Swiper(".slide-content", {
-            slidesPerView: 3,
-            spaceBetween: 25,
-            loop: true,
-            centerSlide: 'true',
-            fade: 'true',
-            grabCursor: 'true',
-            pagination: {
-                el: ".swiper-pagination",
-                clickable: true,
-                dynamicBullets: true,
-            },
-            navigation: {
-                nextEl: ".swiper-button-next",
-                prevEl: ".swiper-button-prev",
-            },
-
-            breakpoints: {
-                0: {
-                    slidesPerView: 1,
-                },
-                520: {
-                    slidesPerView: 2,
-                },
-                950: {
-                    slidesPerView: 3,
-                },
-            },
-        });
-
         const containerImages = document.querySelector('#container-images')
         const template = document.querySelector('#template-images').content
 
@@ -230,6 +202,95 @@
                 modal.show()
             } catch (error) {
                 console.error(error);
+            }
+        }
+
+        function updateCartCount() {
+            const products = JSON.parse(localStorage.getItem("products")) || {};
+            const totalCount = Object.values(products).reduce((acc, curr) => acc + curr.amount, 0);
+            const cartCount = document.getElementById("cart-count");
+            if (cartCount) {
+                cartCount.textContent = totalCount > 0 ? totalCount.toString()+'+' : "0";
+            }
+        }
+
+        function updateProductAmount(productId) {
+            const productAmountEl = document.querySelector(`#amount-${productId}`);
+            const products = JSON.parse(localStorage.getItem("products")) || {};
+            const product = products[productId];
+            productAmountEl.textContent = product ? product.amount : 0;
+        }
+
+        async function productCalculation() {
+            try {
+                const response = await axios.post('{{ route('products.calculation') }}', {
+                    'products': JSON.parse(localStorage.getItem("products"))
+                });
+                const total = response.data.total
+                const cartTotalPrice = document.getElementById("cart-total-price");
+                if (cartTotalPrice) {
+                    cartTotalPrice.textContent = total > 0 ? total.toString() : "0.00";
+                }
+            } catch (error) {
+                console.error(error);
+            }
+        }
+
+        function updateRemoveButtonVisibility(productId) {
+            const products = JSON.parse(localStorage.getItem("products")) || {};
+            const product = products[productId];
+            const removeButtonEl = document.getElementById(`product-remove-${productId}`);
+            if (removeButtonEl) {
+                const productCount = product && product.amount > 0 ? product.amount : 0;
+                removeButtonEl.style.display = productCount > 0 ? "inline-block" : "none";
+            }
+        }
+
+        window.addEventListener('load', function () {
+            const products = JSON.parse(localStorage.getItem('products')) || {};
+            const removeButtons = document.querySelectorAll('.btn-remove-product');
+            removeButtons.forEach(function (button) {
+                const productId = button.id.split('-')[2];
+                if (!products[productId]) {
+                    button.style.display = 'none';
+                }
+            });
+            productCalculation();
+            updateCartCount()
+        });
+
+        const addProductButtons = document.querySelectorAll(".btn-add-product");
+        addProductButtons.forEach((button) => {
+            const productId = button.id.split("-")[1];
+            updateProductAmount(productId);
+        });
+
+        function addProduct(productId) {
+            const products = JSON.parse(localStorage.getItem("products")) || {};
+            if (products[productId]) {
+                products[productId].amount++;
+            } else {
+                products[productId] = {productId, amount: 1};
+            }
+            localStorage.setItem("products", JSON.stringify(products));
+            updateProductAmount(productId);
+            updateCartCount()
+            updateRemoveButtonVisibility(productId);
+            productCalculation();
+        }
+
+        function removeProduct(productId) {
+            const products = JSON.parse(localStorage.getItem("products")) || {};
+            if (products[productId]) {
+                products[productId].amount--;
+                if (products[productId].amount <= 0) {
+                    delete products[productId];
+                }
+                localStorage.setItem("products", JSON.stringify(products));
+                updateProductAmount(productId);
+                updateCartCount();
+                updateRemoveButtonVisibility(productId);
+                productCalculation();
             }
         }
     </script>

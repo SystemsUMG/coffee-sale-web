@@ -24,11 +24,13 @@ use Illuminate\Support\Facades\Route;
 */
 
 //shopping
-Route::get('/', [HomeController::class, 'index'])->name('home');
-
+Route::controller(HomeController::class)->group(function () {
+    Route::get('', 'index')->name('home');
+    Route::post('api/product-calculation', 'productCalculation')->name('products.calculation');
+});
 Route::controller(ContactController::class)->prefix('contact')->group(function () {
-    Route::get('', [ContactController::class, 'index'])->name('contact.index');
-    Route::post('/send-email', [ContactController::class, 'sendEmail'])->name('contact.send-email');
+    Route::get('', 'index')->name('contact.index');
+    Route::post('/send-email', 'sendEmail')->name('contact.send-email');
 });
 Route::get('products/{product}/image-gallery', [ProductController::class, 'imageGallery'])->name('products.imageGallery');
 
@@ -85,5 +87,5 @@ Route::middleware('auth')->group(function () {
     });
 
     //Sales Customers
-    Route::apiResource('api-sales', \App\Http\Controllers\Frontend\SaleController::class);
+    Route::apiResource('api/sales', \App\Http\Controllers\Frontend\SaleController::class);
 });
