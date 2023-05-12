@@ -173,10 +173,10 @@
             savePaymentMethod()
         }, 700);
 
-        const detectButtons = (products) => {
-            const botones = document.querySelectorAll('.card button')
+        const detectButtons = () => {
+            const btn = document.querySelectorAll('.card button')
 
-            botones.forEach(btn => {
+            btn.forEach(btn => {
                 btn.addEventListener('click', () => {
                     if (btn.dataset.type === 'decrease-amount') {
                         decreaseAmount(btn.dataset.id)
