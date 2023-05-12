@@ -114,7 +114,7 @@
                             <h6 class="col text-end" id="shopping-total">Q0.00</h6>
                         </div>
                         <div class="d-grid gap-2 col-12 mt-4 mx-auto">
-                            <a class="btn btn-warning text-dark" href=""
+                            <a class="btn btn-warning text-dark" href="{{ route('shopping.pay') }}"
                                     type="button" id="hide-checkout-button">
                                 Finalizar compra
                                 <i class="bi bi-arrow-right"></i>

@@ -34,7 +34,11 @@ Route::controller(ContactController::class)->prefix('contact')->group(function (
     Route::post('/send-email', 'sendEmail')->name('contact.send-email');
 });
 Route::get('products/{product}/image-gallery', [ProductController::class, 'imageGallery'])->name('products.imageGallery');
-Route::get('shopping-cart', [ShoppingCartController::class, 'index'])->name('shopping.cart');
+
+Route::controller(ShoppingCartController::class)->prefix('shopping')->group(function () {
+    Route::get('cart', 'index')->name('shopping.cart');
+    Route::get('pay', 'pay')->name('shopping.pay')->middleware('auth');
+});
 /*  =====================================================================    */
 
 Route::controller(AuthController::class)->middleware('guest')->group(function () {

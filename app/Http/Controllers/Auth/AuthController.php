@@ -12,14 +12,18 @@ use Illuminate\Support\Str;
 
 class AuthController extends Controller
 {
-    public function loginIndex() {
+    public function loginIndex()
+    {
         return view('auth.login');
     }
-    public function registerIndex() {
+
+    public function registerIndex()
+    {
         return view('auth.register');
     }
 
-    public function login(Request $request) {
+    public function login(Request $request)
+    {
         try {
             $request->validate([
                 'email' => ['required', 'email'],
@@ -30,7 +34,7 @@ class AuthController extends Controller
                 if (Auth::attempt(['email' => $request->email, 'password' => $request->password], true)) {
                     $user->remember_token = Str::random(15);
                     $user->save();
-                    $route = $user->type == 1 ? 'dashboard' : 'home';
+                    $route = $user->type == 1 ? 'dashboard' : 'shopping.pay';
                     return redirect()->route($route);
                 } else {
                     return back()->with('error', 'Credenciales incorrectas');
@@ -43,16 +47,17 @@ class AuthController extends Controller
         }
     }
 
-    public function register(Request $request) {
+    public function register(Request $request)
+    {
         try {
             $validate = $request->validate([
-                'name'     => 'required|string',
-                'email'    => 'required|email|unique:users,email',
+                'name' => 'required|string',
+                'email' => 'required|email|unique:users,email',
                 'password' => 'required',
                 'password_confirmation' => 'required|same:password',
-                'address'  => 'required|string',
-                'phone'    => 'required',
-                'type'     => 'required'
+                'address' => 'required|string',
+                'phone' => 'required',
+                'type' => 'required'
             ]);
             $validate['password'] = Hash::make($request->password);
             $user = User::create($validate);
@@ -66,8 +71,14 @@ class AuthController extends Controller
         }
     }
 
-    public function logout() {
+    public function logout()
+    {
+        if (auth()->user()->type == 2) {
+            $route = route('shopping.cart');
+        } else {
+            $route = route('login.index');
+        }
         Auth::logout();
-        return redirect()->route('login.index');
+        return redirect($route);
     }
 }

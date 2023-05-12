@@ -82,7 +82,6 @@
         </div>
     </div>
 @endif
-
 @if(session('warning'))
     <div class="toast-container position-fixed bottom-0 end-0 p-3">
         <div class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-delay="5000">
@@ -97,7 +96,6 @@
         </div>
     </div>
 @endif
-
 @if(session('error'))
     <div class="toast-container position-fixed bottom-0 end-0 p-3">
         <div class="toast bg-danger-subtle" role="alert" aria-live="assertive" aria-atomic="true" data-delay="5000">

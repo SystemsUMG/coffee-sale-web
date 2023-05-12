@@ -1,8 +1,12 @@
 @php
     $nested = '/*';
-    $urlHome = '/';
+    $urlHome = route('home');
+    $urlContact = route('contact.index');
+    $urlShoppingCart = route('shopping.cart');
 
     $isHome = Request::is($urlHome);
+    $isContact = Request::is($urlContact, $urlContact.$nested);
+    $isShoppingCart = Request::is($urlShoppingCart, $urlShoppingCart.$nested);
 @endphp
 
 <nav class="navbar navbar-expand-lg bg-body-tertiary sticky-top shadow">
@@ -42,7 +46,7 @@
                         <a class="nav-link {{ ($isHome ? 'active' : '') }}" aria-current="page"
                            href="{{ route('home') }}">Inicio</a>
                     </li>
-                    <li class="nav-item">
+                    <li class="nav-item {{ ($isContact ? 'active' : '') }}">
                         <a class="nav-link" href="{{ route('contact.index') }}">Contácto</a>
                     </li>
                     <li class="nav-item">
@@ -53,7 +57,7 @@
                             </p>
                         </div>
                     </li>
-                    <li class="nav-item">
+                    <li class="nav-item  {{ ($isShoppingCart ? 'active' : '') }}">
                         <div class="nav-link">
                             <a href="{{ route('shopping.cart') }}" class="position-relative text-success">
                                 <i class="bi bi-bag-fill"></i>
@@ -78,6 +82,19 @@
                             </div>
                         </div>
                     </li>
+                    @if(auth()->check())
+                        <li class="nav-item">
+                            <div class="nav-link">
+                                <a href="#"
+                                   onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                    <i class="bi bi-box-arrow-left"></i>
+                                </a>
+                                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                                    @csrf
+                                </form>
+                            </div>
+                        </li>
+                    @endif
                 </ul>
             </div>
         </div>

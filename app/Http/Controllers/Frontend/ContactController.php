@@ -60,7 +60,7 @@ class ContactController extends Controller
             ];
         });*/
 
-        $settings = Setting::select('key', 'name', 'value')->get();
+        $settings = Setting::select('key', 'name', 'value')->whereNotIn('key', [7])->get();
 
         $groupedSettings = $settings->groupBy('key');
 
@@ -92,6 +92,10 @@ class ContactController extends Controller
                     $type = 'Teléfono';
                     $icon = '<i class="text-center fs-1 bi bi-telephone"></i>';
                     break;
+                case '8':
+                    $type = 'Dirección';
+                    $icon = '<i class="text-center fs-1 bi bi-geo-alt-fill text-danger"></i>';
+                    break;
             }
 
             $links = $group->map(function ($item, $key) {
@@ -104,7 +108,7 @@ class ContactController extends Controller
             return (object)[
                 'type' => $type,
                 'links' => $links,
-                'icon' => $icon,
+                'icon' => $icon ?? '',
             ];
         });
 

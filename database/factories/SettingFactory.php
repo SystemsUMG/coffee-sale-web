@@ -17,7 +17,7 @@ class SettingFactory extends Factory
     public function definition(): array
     {
         return [
-            'key' => fake()->numberBetween(1,7),
+            'key' => fake()->numberBetween(1,8),
             'name' => fake()->name(1),
             'value' => fake()->text(20),
         ];
