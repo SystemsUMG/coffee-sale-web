@@ -115,7 +115,7 @@
                         </div>
                         <div class="d-grid gap-2 col-12 mt-4 mx-auto">
                             <a class="btn btn-warning text-dark" href="{{ route('shopping.pay') }}"
-                                    type="button" id="hide-checkout-button">
+                               type="button" id="hide-checkout-button">
                                 Finalizar compra
                                 <i class="bi bi-arrow-right"></i>
                             </a>
@@ -136,40 +136,45 @@
         const shoppingContainer = document.querySelector('#shopping-container')
 
         setTimeout(function () {
-            const shopping = window.shopping
-            const products = shopping.products
+            try {
+                const shopping = window.shopping
+                const products = shopping.products
 
-            const shoppingProducts = document.getElementById('shopping-products').content;
-            const fragment = document.createDocumentFragment()
+                const shoppingProducts = document.getElementById('shopping-products').content;
+                const fragment = document.createDocumentFragment()
 
-            products.forEach(product => {
-                const {productId, url, name, price, total, amount} = product
-                shoppingProducts.querySelector('img').setAttribute('src', url)
-                shoppingProducts.querySelector('.title').textContent = name
-                shoppingProducts.querySelector('.price').textContent = 'Q' + price.toFixed(2)
-                shoppingProducts.querySelector('.subTotal').textContent = 'Q' + total.toFixed(2)
-                shoppingProducts.querySelector('.decrease-amount').dataset.id = productId
-                shoppingProducts.querySelector('.amount').textContent = amount
-                shoppingProducts.querySelector('.decrease-amount').dataset.id = productId
-                shoppingProducts.querySelector('.decrease-amount').dataset.type = 'decrease-amount'
-                shoppingProducts.querySelector('.increase-amount').dataset.id = productId
-                shoppingProducts.querySelector('.increase-amount').dataset.type = 'increase-amount'
-                shoppingProducts.querySelector('.remove-product').dataset.id = productId
-                shoppingProducts.querySelector('.remove-product').dataset.type = 'remove-product'
-                const clone = shoppingProducts.cloneNode(true)
-                fragment.appendChild(clone)
-            })
-            shoppingContainer.appendChild(fragment)
+                products.forEach(product => {
+                    const {productId, url, name, price, total, amount} = product
+                    shoppingProducts.querySelector('img').setAttribute('src', url)
+                    shoppingProducts.querySelector('.title').textContent = name
+                    shoppingProducts.querySelector('.price').textContent = 'Q' + price.toFixed(2)
+                    shoppingProducts.querySelector('.subTotal').textContent = 'Q' + total.toFixed(2)
+                    shoppingProducts.querySelector('.decrease-amount').dataset.id = productId
+                    shoppingProducts.querySelector('.amount').textContent = amount
+                    shoppingProducts.querySelector('.decrease-amount').dataset.id = productId
+                    shoppingProducts.querySelector('.decrease-amount').dataset.type = 'decrease-amount'
+                    shoppingProducts.querySelector('.increase-amount').dataset.id = productId
+                    shoppingProducts.querySelector('.increase-amount').dataset.type = 'increase-amount'
+                    shoppingProducts.querySelector('.remove-product').dataset.id = productId
+                    shoppingProducts.querySelector('.remove-product').dataset.type = 'remove-product'
+                    const clone = shoppingProducts.cloneNode(true)
+                    fragment.appendChild(clone)
+                })
+                shoppingContainer.appendChild(fragment)
 
-            const shoppingTotal = document.getElementById('shopping-total');
-            const shoppingDescription = document.getElementById('shopping-description');
-            const hideCheckoutButton = document.getElementById('hide-checkout-button');
-            shoppingTotal.textContent = 'Q' + shopping.total.toFixed(2)
-            shoppingDescription.textContent = products.length <= 0 ? ' No tienes productos en tu carrito' : 'Productos disponibles'
-            hideCheckoutButton.style.display = products.length <= 0 ? "none" : "";
+                const shoppingTotal = document.getElementById('shopping-total');
+                const shoppingDescription = document.getElementById('shopping-description');
+                const hideCheckoutButton = document.getElementById('hide-checkout-button');
+                shoppingTotal.textContent = 'Q' + shopping.total.toFixed(2)
+                shoppingDescription.textContent = products.length <= 0 ? ' No tienes productos en tu carrito' : 'Productos disponibles'
+                hideCheckoutButton.style.display = products.length <= 0 ? "none" : "";
 
-            detectButtons(products)
-            savePaymentMethod()
+                detectButtons(products)
+                savePaymentMethod()
+            } catch (e) {
+                location.reload()
+            }
+
         }, 700);
 
         const detectButtons = () => {
@@ -243,8 +248,6 @@
                         radio.checked = true;
                     }
                 });
-            } else {
-
             }
         }
 

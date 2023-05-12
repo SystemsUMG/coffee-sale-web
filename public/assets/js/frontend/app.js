@@ -27,6 +27,7 @@ async function productCalculation() {
 
     } catch (error) {
         console.error(error);
+        location.reload()
     }
 }
 
