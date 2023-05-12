@@ -43,4 +43,9 @@ class Sale extends Model
     {
         return $this->morphOne(Image::class, 'imageable');
     }
+
+    public function user(): belongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
 }
