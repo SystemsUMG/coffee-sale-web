@@ -12,64 +12,104 @@ class ContactController extends Controller
 {
     public function index()
     {
-        $settingsQuery = Setting::get();
-        $settings = [];
+        /*$settings = Setting::select('key', 'name', 'value')->get();
 
-        foreach ($this->settings_key as $key => $settings_key) {
-            $settings[$key] = [
-                'type' => $settings_key,
-                'links' => []
-            ];
-        }
+        $groupedSettings = $settings->groupBy('key');
 
-        $settingsQuery->each(function ($setting) use (&$settings) {
-            switch ($setting->key) {
-                case 1:
-                    $settings[1]['icon'] = '<i class="text-center fs-1 bi bi-facebook"></i>';
-                    $settings[1]['links'][$setting->id] = [
-                        'name' => $setting->name,
-                        'url' => $setting->value
-                    ];
+        $collection = $groupedSettings->map(function ($group, $key) {
+            $type = '';
+
+            switch ($key) {
+                case '1':
+                    $type = 'Facebook';
+                    $icon = '<i class="text-center fs-1 bi bi-facebook"></i>';
                     break;
-                case 2:
-                    $settings[2]['icon'] = '<i class="text-center fs-1 bi bi-instagram"></i>';
-                    $settings[2]['links'][$setting->id] = [
-                        'name' => $setting->name,
-                        'url' => $setting->value
-                    ];
+                case '2':
+                    $type = 'Instagram';
+                    $icon = '<i class="text-center fs-1 bi bi-instagram"></i>';
                     break;
-                case 3:
-                    $settings[3]['icon'] = '<i class="text-center fs-1 bi bi-twitter"></i>';
-                    $settings[3]['links'][$setting->id] = [
-                        'name' => $setting->name,
-                        'url' => $setting->value
-                    ];
+                case '3':
+                    $type = 'Twitter';
+                    $icon = '<i class="text-center fs-1 bi bi-twitter"></i>';
                     break;
-                case 4:
-                    $settings[4]['icon'] = '<i class="text-center fs-1 bi bi-tiktok"></i>';
-                    $settings[4]['links'][$setting->id] = [
-                        'name' => $setting->name,
-                        'url' => $setting->value
-                    ];
+                case '4':
+                    $type = 'Tiktok';
+                    $icon = '<i class="text-center fs-1 bi bi-tiktok"></i>';
                     break;
-                case 5:
-                    $settings[5]['icon'] = '<i class="text-center fs-1 bi bi-envelope-fill"></i>';
-                    $settings[5]['links'][$setting->id] = [
-                        'name' => $setting->name,
-                        'url' => $setting->value
-                    ];
+                case '5':
+                    $type = 'Email';
+                    $icon = '<i class="text-center fs-1 bi bi-envelope"></i>';
                     break;
-                case 6:
-                    $settings[6]['icon'] = '<i class="text-center fs-1 bi bi-telephone-fill"></i>';
-                    $settings[6]['links'][$setting->id] = [
-                        'name' => $setting->name,
-                        'url' => $setting->value
-                    ];
+                case '6':
+                    $type = 'Teléfono';
+                    $icon = '<i class="text-center fs-1 bi bi-telephone"></i>';
                     break;
             }
+
+            $links = $group->map(function ($item, $key) {
+                return [
+                    'name' => $item->name,
+                    'url' => $item->value,
+                ];
+            });
+
+            return [
+                'type' => $type,
+                'links' => $links,
+                'icon' => $icon,
+            ];
+        });*/
+
+        $settings = Setting::select('key', 'name', 'value')->get();
+
+        $groupedSettings = $settings->groupBy('key');
+
+        $collection = $groupedSettings->map(function ($group, $key) {
+            $type = '';
+
+            switch ($key) {
+                case '1':
+                    $type = 'Facebook';
+                    $icon = '<i class="text-center fs-1 bi bi-facebook text-primary"></i>';
+                    break;
+                case '2':
+                    $type = 'Instagram';
+                    $icon = '<i class="text-center fs-1 bi bi-instagram text-danger"></i>';
+                    break;
+                case '3':
+                    $type = 'Twitter';
+                    $icon = '<i class="text-center fs-1 bi bi-twitter text-info"></i>';
+                    break;
+                case '4':
+                    $type = 'Tiktok';
+                    $icon = '<i class="text-center fs-1 bi bi-tiktok"></i>';
+                    break;
+                case '5':
+                    $type = 'Email';
+                    $icon = '<i class="text-center fs-1 bi bi-envelope"></i>';
+                    break;
+                case '6':
+                    $type = 'Teléfono';
+                    $icon = '<i class="text-center fs-1 bi bi-telephone"></i>';
+                    break;
+            }
+
+            $links = $group->map(function ($item, $key) {
+                return [
+                    'name' => $item->name,
+                    'url' => $item->value,
+                ];
+            });
+
+            return (object)[
+                'type' => $type,
+                'links' => $links,
+                'icon' => $icon,
+            ];
         });
+
         return view('frontend.pages.contact', [
-            'settings' => $settings
+            'settings' => $collection
         ]);
     }
 
@@ -82,10 +122,10 @@ class ContactController extends Controller
         try {
             $email = new ContactEmail($validate);
             Mail::to($request->email)->send($email);
-
-            return redirect()->back()->with('success', 'Mensaje Enviado');
+            return response()->json('¡Gracias por contactarnos!');
         } catch (\Exception $e) {
-            return redirect()->back()->with('error', $e);
+            return response()->json($e);
         }
     }
+
 }

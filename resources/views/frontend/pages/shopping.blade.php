@@ -81,7 +81,7 @@
 
     <div class="bg-moss-green p-4 p-sm-3 mt-0">
         <div class="row justify-content-center">
-            <div class="card bg-green-gray text-light col-md-5 col-lg-4 col-xl-2 col-xxl-2 m-2">
+            <div class="card bg-green-gray shadow-none text-light col-md-5 col-lg-4 col-xl-2 col-xxl-2 m-2">
                 <div class="card-body">
                     <div class="row">
                         <div class="col-3">
@@ -94,7 +94,7 @@
                     </div>
                 </div>
             </div>
-            <div class="card bg-green-gray text-light col-md-5 col-lg-4 col-xl-3 col-xxl-2 m-2">
+            <div class="card bg-green-gray shadow-none text-light col-md-5 col-lg-4 col-xl-3 col-xxl-2 m-2">
                 <div class="card-body">
                     <div class="row">
                         <div class="col-3">
@@ -107,7 +107,7 @@
                     </div>
                 </div>
             </div>
-            <div class="card bg-green-gray text-light col-md-5 col-lg-4 col-xl-3 col-xxl-2 m-2">
+            <div class="card bg-green-gray shadow-none text-light col-md-5 col-lg-4 col-xl-3 col-xxl-2 m-2">
                 <div class="card-body">
                     <div class="row">
                         <div class="col-3">

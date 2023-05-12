@@ -27,7 +27,7 @@ use Illuminate\Support\Facades\Route;
 /*  ============================  shopping   ============================    */
 Route::controller(HomeController::class)->group(function () {
     Route::get('', 'index')->name('home');
-    Route::post('api/product-calculation', 'productCalculation')->name('products.calculation');
+    Route::post('api-product-calculation', 'productCalculation')->name('products.calculation');
 });
 Route::controller(ContactController::class)->prefix('contact')->group(function () {
     Route::get('', 'index')->name('contact.index');
@@ -91,5 +91,5 @@ Route::middleware('auth')->group(function () {
     });
 
     //Sales Customers
-    Route::apiResource('api/sales', \App\Http\Controllers\Frontend\SaleController::class);
+    Route::apiResource('api-sales', \App\Http\Controllers\Frontend\SaleController::class);
 });

@@ -20,16 +20,46 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
 
+    <!-- Styles CSS -->
+    <link rel="stylesheet" href="{{ asset('assets/css/frontend.css') }}">
     <!-- Axios -->
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
     <!-- Alpinejs -->
-    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script src="//unpkg.com/alpinejs" defer></script>
 
     @stack('styles')
 </head>
 
 <body>
+<div class="preloader" id="loader">
+    <svg class="cart" role="img" aria-label="Shopping cart line animation" viewBox="0 0 128 128" width="128px"
+         height="128px" xmlns="http://www.w3.org/2000/svg">
+        <g fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="8">
+            <g class="cart__track" stroke="hsla(0,10%,10%,0.1)">
+                <polyline points="4,4 21,4 26,22 124,22 112,64 35,64 39,80 106,80"/>
+                <circle cx="43" cy="111" r="13"/>
+                <circle cx="102" cy="111" r="13"/>
+            </g>
+            <g class="cart__lines" stroke="currentColor">
+                <polyline class="cart__top" points="4,4 21,4 26,22 124,22 112,64 35,64 39,80 106,80"
+                          stroke-dasharray="338 338" stroke-dashoffset="-338"/>
+                <g class="cart__wheel1" transform="rotate(-90,43,111)">
+                    <circle class="cart__wheel-stroke" cx="43" cy="111" r="13" stroke-dasharray="81.68 81.68"
+                            stroke-dashoffset="81.68"/>
+                </g>
+                <g class="cart__wheel2" transform="rotate(90,102,111)">
+                    <circle class="cart__wheel-stroke" cx="102" cy="111" r="13" stroke-dasharray="81.68 81.68"
+                            stroke-dashoffset="81.68"/>
+                </g>
+            </g>
+        </g>
+    </svg>
+    <div class="preloader__text">
+        <p class="preloader__msg ms-2"> Cargando…</p>
+        <p class="preloader__msg preloader__msg--last">Esto está tomando más de lo esperado...</p>
+    </div>
+</div>
 
 <div class="bg-body">
     @include('frontend.layouts.navbar')
@@ -55,7 +85,7 @@
 
 @if(session('warning'))
     <div class="toast-container position-fixed bottom-0 end-0 p-3">
-        <div class="toast bg-danger-subtle" role="alert" aria-live="assertive" aria-atomic="true" data-delay="5000">
+        <div class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-delay="5000">
             <div class="toast-header">
                 <strong class="me-auto"><i class="bi bi-exclamation-circle-fill text-warning fs-3 me-2"></i><span>Ha ocurrido algo inesperado</span></strong>
                 <small>{{ date('H:i:s') }}</small>
@@ -84,47 +114,21 @@
     </div>
 @endif
 
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const toastElList = [].slice.call(document.querySelectorAll('.toast'))
-        const toastList = toastElList.map(function (toastEl) {
-            return new bootstrap.Toast(toastEl)
-        });
-        toastList.forEach(toast => toast.show());
-    });
+<div class="toast-container position-fixed bottom-0 end-0 p-3">
+    <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-header">
+            <strong class="me-auto">
+                <i class="bi bi-x-circle-fill text-danger fs-3 me-2"></i><span>Title</span></strong>
+            <small>time and date for humans</small>
+            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body">
+            message
+        </div>
+    </div>
+</div>
 
-
-    function updateCartCount() {
-        const products = JSON.parse(localStorage.getItem("products")) || {};
-        const totalCount = Object.values(products).reduce((acc, curr) => acc + curr.amount, 0);
-        const cartCount = document.getElementById("cart-count");
-        if (cartCount) {
-            cartCount.textContent = totalCount > 0 ? totalCount.toString()+'+' : "0";
-        }
-    }
-
-    async function productCalculation() {
-        try {
-            const response = await axios.post('{{ route('products.calculation') }}', {
-                'products': JSON.parse(localStorage.getItem("products"))
-            });
-            const total = response.data.total
-            const cartTotalPrice = document.getElementById("cart-total-price");
-            if (cartTotalPrice) {
-                cartTotalPrice.textContent = total > 0 ? total.toFixed(2) : "0.00";
-            }
-        } catch (error) {
-            console.error(error);
-        }
-    }
-
-
-    window.addEventListener('load', function () {
-        updateCartCount()
-        productCalculation();
-    });
-
-</script>
+<script src="{{ asset('assets/js/frontend/app.js') }}"></script>
 
 @stack('scripts')
 

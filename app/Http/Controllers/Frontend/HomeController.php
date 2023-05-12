@@ -34,8 +34,9 @@ class HomeController extends Controller
             $productCalculation->get('products')->push((object)[
                 'productId' => $product->productId,
                 'name' => $productQuery->name,
-                'url' => Storage::disk('public')->url($productQuery->images->where('type', 1)->first()->url),
+                'url' => Storage::disk('public')->url($productQuery->images->where('type', 1)->first()->url ?? ''),
                 'amount' => $product->amount,
+                'price' => $productQuery->price,
                 'total' => $product->amount * $productQuery->price
             ]);
         });
