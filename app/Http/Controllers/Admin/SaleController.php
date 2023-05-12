@@ -33,12 +33,11 @@ class SaleController extends Controller
         $this->response = $this->listData($request, $sales);
         $sales = $this->response['data'];
         $data = [];
-        foreach ($sales as $sale)
-        {
+        foreach ($sales as $sale) {
             $data[] = [
                 'id' => $sale->id,
                 'customer' => $sale->customer->name,
-                'amount' => 'Q.'.$sale->amount_paid,
+                'amount' => 'Q.' . $sale->amount_paid,
                 'status' => $this->statuses()[$sale->status] ?? 'Indefinido',
                 'paid_type' => $this->payment_types[$sale->payment_type] ?? 'Indefinido',
                 'transaction_number' => $sale->transaction_number,
@@ -46,9 +45,9 @@ class SaleController extends Controller
             ];
         }
         $response = [
-            'recordsTotal'    => $this->response['recordsTotal'],
+            'recordsTotal' => $this->response['recordsTotal'],
             'recordsFiltered' => $this->response['recordsFiltered'],
-            'data'            => $data,
+            'data' => $data,
         ];
         return response()->json($response);
     }
@@ -60,7 +59,7 @@ class SaleController extends Controller
         foreach (json_decode($sale->tracking) as $key => $tracking) {
             $data[] = [
                 'status' => $key,
-                'date' => Carbon::parse($tracking)->format('d/m/y  H:i A') ,
+                'date' => Carbon::parse($tracking)->format('d/m/y  H:i A'),
                 'icon' => $this->statuses()[$key] ?? 'Indefinido',
             ];
         }
@@ -77,6 +76,7 @@ class SaleController extends Controller
         $this->updateStatus($sale, $request->status);
         return back()->with('success', 'Estado actualizado');
     }
+
     /**
      * Store a newly created resource in storage.
      */
@@ -95,7 +95,7 @@ class SaleController extends Controller
             $validate['amount_paid'] = 0;
             $validate['tracking'] = json_encode([$validate['date_generated']]);
             $sale = Sale::create($validate);
-            $this->updateStatus($sale,1);
+            $this->updateStatus($sale, 1);
             $amount_paid = 0;
             foreach ($validate['items'] as $item) {
                 $product = Product::find($item['id']);
@@ -118,7 +118,8 @@ class SaleController extends Controller
             $this->status_code = 500;
         }
         $this->response = [
-            'message' => $this->message
+            'message' => $this->message,
+            'sale_id' => $sale->id
         ];
         return response()->json($this->response, $this->status_code);
     }
@@ -161,8 +162,8 @@ class SaleController extends Controller
                 // Agrupar los resultados por clave 'key'
                 $groupedSettings = $settings->groupBy('key');
                 // Asignar los valores a las variables correspondientes
-                $phone   = $groupedSettings[6][0]->value ?? '';
-                $nit     = $groupedSettings[7][0]->value ?? '';
+                $phone = $groupedSettings[6][0]->value ?? '';
+                $nit = $groupedSettings[7][0]->value ?? '';
                 $address = $groupedSettings[8][0]->value ?? '';
 
                 $pdf = Pdf::loadView('admin.sales.bill', compact('sale', 'phone', 'nit', 'address'));
@@ -190,13 +191,13 @@ class SaleController extends Controller
     /**
      * Almacenar factura
      */
-    public function saveBill($file, Sale $sale) : String
+    public function saveBill($file, Sale $sale): string
     {
         $name = "$sale->authorization_number.pdf";
         $file->save(storage_path("app/public/bills/$name"));
 
         $sale->bill()->create([
-            'url'  => "bills/$name",
+            'url' => "bills/$name",
             'type' => 1
         ]);
 

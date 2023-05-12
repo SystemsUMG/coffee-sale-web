@@ -95,5 +95,6 @@ Route::middleware('auth')->group(function () {
     });
 
     //Sales Customers
-    Route::apiResource('api-sales', \App\Http\Controllers\Frontend\SaleController::class);
+    Route::apiResource('api-sales', SaleController::class);
+    Route::get('shopping/end-of-order/{sale}', [ShoppingCartController::class, 'endOfOrder'])->name('shopping.end-of-order');
 });

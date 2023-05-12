@@ -125,8 +125,8 @@
         document.getElementById('contact-form').addEventListener('submit', function (event) {
             event.preventDefault();
             const loaderElement = document.getElementById("loader");
-            const formData = new FormData(event.target);
             loaderElement.classList.remove("d-none");
+            const formData = new FormData(event.target);
             axios.post(event.target.action, formData)
                 .then(response => {
                     const emailInput = document.querySelector('#email');
