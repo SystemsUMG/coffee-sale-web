@@ -23,19 +23,16 @@ async function productCalculation() {
         setTimeout(function () {
             const loaderElement = document.getElementById("loader");
             loaderElement.classList.add("d-none");
-        }, 500);
+        }, 600);
 
     } catch (error) {
         console.error(error);
     }
 }
 
-document.addEventListener("storage", function () {
-    console.log('storage')
-});
 document.addEventListener("DOMContentLoaded", function () {
     updateCartCount()
-    productCalculation().then(r => console.log(r));
+    productCalculation();
 });
 
 
