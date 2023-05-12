@@ -114,11 +114,11 @@
                             <h6 class="col text-end" id="shopping-total">Q0.00</h6>
                         </div>
                         <div class="d-grid gap-2 col-12 mt-4 mx-auto">
-                            <button class="btn btn-warning text-dark" onClick="finalizePurchase()"
+                            <a class="btn btn-warning text-dark" href=""
                                     type="button" id="hide-checkout-button">
                                 Finalizar compra
                                 <i class="bi bi-arrow-right"></i>
-                            </button>
+                            </a>
                             <a href="/#products" class="btn btn-primary" type="button">
                                 <i class="bi bi-plus-circle-fill"></i>
                                 Agregar otro producto
@@ -133,7 +133,6 @@
 
 @push('scripts')
     <script>
-        let selectedPaymentMethod = 'tarjeta';
         const shoppingContainer = document.querySelector('#shopping-container')
 
         setTimeout(function () {
@@ -218,16 +217,36 @@
         }
 
         function savePaymentMethod() {
+            verifyPaymentMethod()
             const radios = document.getElementsByName('options');
+            let selectedPaymentMethod = localStorage.getItem('paymentMethod');
+
+            if (!selectedPaymentMethod) {
+                selectedPaymentMethod = 'tarjeta';
+                localStorage.setItem('paymentMethod', selectedPaymentMethod);
+            }
             radios.forEach(radio => {
                 radio.addEventListener('click', () => {
                     selectedPaymentMethod = radio.id;
+                    localStorage.setItem('paymentMethod', selectedPaymentMethod);
                 });
             });
         }
 
-        function finalizePurchase() {
+        function verifyPaymentMethod() {
+            const radios = document.getElementsByName('options');
+            const selectedPaymentMethod = localStorage.getItem('paymentMethod');
 
+            if (selectedPaymentMethod) {
+                radios.forEach(radio => {
+                    if (radio.id === selectedPaymentMethod) {
+                        radio.checked = true;
+                    }
+                });
+            } else {
+
+            }
         }
+
     </script>
 @endpush
