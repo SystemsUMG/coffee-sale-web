@@ -47,7 +47,7 @@
                                         <div class="row">
                                             <div class="col">
                                                 <img
-                                                    src="{!! Storage::disk('public')->url($saleDetail->product->images->where('type', 1)->first()??'') !!}"
+                                                    src="{!! Storage::disk('public')->url($saleDetail->product->images->where('type', 1)->first()->url??'') !!}"
                                                     width="30%"
                                                     alt="...">
                                             </div>
