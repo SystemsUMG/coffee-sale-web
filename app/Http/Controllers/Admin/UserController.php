@@ -77,7 +77,9 @@ class UserController extends Controller
                 'account_number'  => 'nullable|numeric',
                 'nit'      => 'nullable|numeric|min_digits:6|max_digits:9',
             ]);
-            $validate['password'] = Hash::make($request->password);
+            if ($request->password) {
+                $validate['password'] = Hash::make($request->password);
+            }
             $user = User::find($id);
             $user->update($validate);
             $this->response_type = 'success';

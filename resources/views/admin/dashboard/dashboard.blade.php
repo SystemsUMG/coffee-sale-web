@@ -36,7 +36,7 @@
                                         <i class="bi bi-cart"></i>
                                     </div>
                                     <div class="ps-3">
-                                        <h6 id="sales">145</h6>
+                                        <h6 id="sales">0</h6>
                                     </div>
                                 </div>
                             </div>
@@ -52,7 +52,7 @@
                                         <i class="bi bi-currency-dollar"></i>
                                     </div>
                                     <div class="ps-3">
-                                        <h6 id="incomes">$3,264</h6>
+                                        <h6 id="incomes">0</h6>
                                     </div>
                                 </div>
                             </div>
@@ -69,7 +69,7 @@
                                         <i class="bi bi-people"></i>
                                     </div>
                                     <div class="ps-3">
-                                        <h6 id="customers">1244</h6>
+                                        <h6 id="customers">0</h6>
                                     </div>
                                 </div>
 
