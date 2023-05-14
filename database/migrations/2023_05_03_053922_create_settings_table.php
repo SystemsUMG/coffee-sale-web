@@ -15,7 +15,7 @@ return new class extends Migration
             $table->bigIncrements('id');
             $table->integer('key');
             $table->string('name');
-            $table->string('value');
+            $table->string('value')->nullable();
             $table->timestamps();
         });
     }

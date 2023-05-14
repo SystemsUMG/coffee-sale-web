@@ -18,6 +18,7 @@ return new class extends Migration
             $table->float('amount_paid');
             $table->string('transaction_number');
             $table->string('payment_type');
+            $table->string('authorization_number')->nullable();
             $table->unsignedBigInteger('user_id');
             $table->timestamps();
 
