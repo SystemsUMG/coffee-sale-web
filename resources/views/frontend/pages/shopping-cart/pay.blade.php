@@ -248,11 +248,11 @@
             });
             let paymentMethodId;
             if (paymentMethod === "tarjeta") {
-                paymentMethodId = 1;
+                paymentMethodId = 3;
             } else if (paymentMethod === "cheque") {
                 paymentMethodId = 2;
             } else if (paymentMethod === "efectivo") {
-                paymentMethodId = 3;
+                paymentMethodId = 1;
             }
 
             axios.post('{{ route('api-sales.store') }}', {

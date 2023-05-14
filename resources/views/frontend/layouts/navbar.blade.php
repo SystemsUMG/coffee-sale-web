@@ -12,14 +12,14 @@
 <nav class="navbar navbar-expand-lg bg-body-tertiary sticky-top shadow">
     <div class="container-fluid">
         <div class="row col-12 col-sm-3">
-            <div class="col-9">
+            <a href="{{ route('home') }}" class="col-9 text-decoration-none text-dark">
                 <img
                     src="{{ asset('assets/img/apple-touch-icon.png') }}"
                     width="15%"
                     alt="logo"
                 >
                 <span class="fw-bolder text-uppercase">Cafetenango</span>
-            </div>
+            </a>
             <div class="col">
                 <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas"
                         data-bs-target="#offcanvasNavbar"
