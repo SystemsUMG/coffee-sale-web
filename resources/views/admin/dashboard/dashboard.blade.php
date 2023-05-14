@@ -81,57 +81,9 @@
                         <div class="card">
                             <div class="card-body">
                                 <h5 class="card-title">Reporte de Ventas</h5>
-
                                 <!-- Line Chart -->
                                 <div id="reportsChart"></div>
-
-                                <script>
-                                    document.addEventListener("DOMContentLoaded", () => {
-                                        new ApexCharts(document.querySelector("#reportsChart"), {
-                                            series: [{
-                                                name: 'Sales',
-                                                data: [31, 40, 28, 51, 42, 82, 56],
-                                            }],
-                                            chart: {
-                                                height: 350,
-                                                type: 'area',
-                                                toolbar: {
-                                                    show: false
-                                                },
-                                            },
-                                            markers: {
-                                                size: 4
-                                            },
-                                            colors: ['#2eca6a'],
-                                            fill: {
-                                                type: "gradient",
-                                                gradient: {
-                                                    shadeIntensity: 1,
-                                                    opacityFrom: 0.3,
-                                                    opacityTo: 0.4,
-                                                    stops: [0, 90, 100]
-                                                }
-                                            },
-                                            dataLabels: {
-                                                enabled: false
-                                            },
-                                            stroke: {
-                                                curve: 'smooth',
-                                                width: 2
-                                            },
-                                            xaxis: {
-                                                categories: ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio"]
-                                            },
-                                            tooltip: {
-                                                x: {
-                                                    //format: 'dd/MM/yy HH:mm'
-                                                },
-                                            }
-                                        }).render();
-                                    });
-                                </script>
                                 <!-- End Line Chart -->
-
                             </div>
 
                         </div>
@@ -153,20 +105,6 @@
                                     </tr>
                                     </thead>
                                     <tbody id="table-body">
-                                    <tr>
-                                        <th scope="row">2457</th>
-                                        <td>Brandon Jacob</td>
-                                        <td>At praesentium minu</td>
-                                        <td>$64</td>
-                                        <td><span class="badge bg-success">Approved</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td><a href="#" class="text-primary">Blanditiis dolor omnis similique</a></td>
-                                        <td>$47</td>
-                                        <td><span class="badge bg-success">Approved</span></td>
-                                        <td><span class="badge bg-danger">Rejected</span></td>
-                                        <td><span class="badge bg-warning">Pending</span></td>
-                                    </tr>
                                     </tbody>
                                 </table>
 
@@ -181,7 +119,6 @@
 
             <!-- Right side columns -->
             <div class="col-lg-4">
-
                 <!-- Budget Report -->
                 <div class="card">
                     <div class="card-body pb-0">
@@ -190,7 +127,6 @@
                     </div>
                 </div>
                 <!-- End Budget Report -->
-
                 <!-- Website Traffic -->
                 <div class="card">
                     <div class="card-body pb-0">
@@ -199,60 +135,14 @@
                     </div>
                 </div>
                 <!-- End Website Traffic -->
-
-            </div><!-- End Right side columns -->
-
+            </div>
+            <!-- End Right side columns -->
         </div>
     </section>
 @endsection
 @push('scripts')
     <script>
         $(document).ready(function () {
-
-            const res = {
-                "sales": 2,
-                "sales_money": 710,
-                "customers": 1,
-                "graphics": {
-                    // "sales":{
-                    //     "labels":[
-                    //         "Enero",
-                    //         "Febrero",
-                    //         "Marzo",
-                    //         "Abril",
-                    //         "Mayo",
-                    //         "Junio",
-                    //         "Julio",
-                    //         "Agosto",
-                    //         "Septiembre",
-                    //         "Octubre",
-                    //         "Noviembre",
-                    //         "Diciembre"
-                    //     ],
-                    //         "values":[
-                    //
-                    //     ]
-                    // },
-                    "sales_by_product": {
-                        "labels": [
-                            "Cafetalito",
-                            "Cafe pergamino Bolsa"
-                        ],
-                        "values": [6, 4, 6, 4]
-                    },
-                    "purchases": [
-                        {
-                            "description": "sadfsad",
-                            "price": 890
-                        },
-                        {
-                            "description": "Caf\u00e9 pergamino",
-                            "price": 600
-                        }
-                    ]
-                }
-            }
-
             getData()
 
             const radios = document.getElementsByName('type');
@@ -263,88 +153,110 @@
             })
 
             function getData(type = 1) {
-                $('#sales').text(res.sales)
-                $('#incomes').text(res.sales_money)
-                $('#customers').text(res.customers)
+                $.ajax({
+                    type: 	 'GET',
+                    url: 	 '/admin/dashboard/data', //dashboard.data
+                    data: { type : type},
+                    success: function (res){
+                        $('#sales').text(res.sales)
+                        $('#incomes').text(res.sales_money)
+                        $('#customers').text(res.customers)
 
-                //Grafica de ventas por producto
-                let indicators = getLabelsBudget(res.graphics.sales_by_product.labels)
-                echarts.init(document.querySelector("#budgetChart")).setOption({
-                    legend: {
-                        data: ['Cantidad']
+                        //Grafica de ventas por producto
+                        let indicators = getLabelsBudget(res.graphics.sales_by_product.labels)
+                        echarts.init(document.querySelector("#budgetChart")).setOption({
+                            legend: {
+                                data: ['Cantidad']
+                            },
+                            radar: {
+                                indicator: indicators
+                            },
+                            series: [{
+                                type: 'radar',
+                                data: [
+                                    {
+                                        value: res.graphics.sales_by_product.values
+                                    }
+                                ]
+                            }]
+                        })
+
+                        //Grafica de compras
+                        let data = getDataPie(res.graphics.purchases)
+                        echarts.init(document.querySelector("#trafficChart")).setOption({
+                            tooltip: {
+                                trigger: 'item'
+                            },
+                            legend: {
+                                top: '5%',
+                                left: 'center'
+                            },
+                            series: [{
+                                name: 'Compras',
+                                type: 'pie',
+                                radius: ['40%', '70%'],
+                                avoidLabelOverlap: false,
+                                label: {
+                                    show: false,
+                                    position: 'center'
+                                },
+                                emphasis: {
+                                    label: {
+                                        show: true,
+                                        fontSize: '18',
+                                        fontWeight: 'bold'
+                                    }
+                                },
+                                labelLine: {
+                                    show: false
+                                },
+                                data: data
+                            }]
+                        })
+
+                        //Grafica de ventas
+                        $("#reportsChart").empty()
+                        new ApexCharts(document.querySelector("#reportsChart"), {
+                            series: [{
+                                name: 'Ventas',
+                                data: res.graphics.sales.values,
+                            }],
+                            chart: {
+                                height: 350,
+                                type: 'area',
+                                toolbar: {
+                                    show: false
+                                },
+                            },
+                            markers: {
+                                size: 4
+                            },
+                            colors: ['#2eca6a'],
+                            fill: {
+                                type: "gradient",
+                                gradient: {
+                                    shadeIntensity: 1,
+                                    opacityFrom: 0.3,
+                                    opacityTo: 0.4,
+                                    stops: [0, 90, 100]
+                                }
+                            },
+                            dataLabels: {
+                                enabled: false
+                            },
+                            stroke: {
+                                curve: 'smooth',
+                                width: 2
+                            },
+                            xaxis: {
+                                categories:  res.graphics.sales.labels
+                            },
+                        }).render();
+
+                        appendTable(res.graphics.sales_table)
                     },
-                    radar: {
-                        indicator: indicators
-                    },
-                    series: [{
-                        type: 'radar',
-                        data: [
-                            {
-                                value: res.graphics.sales_by_product.values
-                            }
-                        ]
-                    }]
+                    error: function(err){}
                 })
-
-                //Grafica de compras
-                let data = getDataPie(res.graphics.purchases)
-                echarts.init(document.querySelector("#trafficChart")).setOption({
-                    tooltip: {
-                        trigger: 'item'
-                    },
-                    legend: {
-                        top: '5%',
-                        left: 'center'
-                    },
-                    series: [{
-                        name: 'Compras',
-                        type: 'pie',
-                        radius: ['40%', '70%'],
-                        avoidLabelOverlap: false,
-                        label: {
-                            show: false,
-                            position: 'center'
-                        },
-                        emphasis: {
-                            label: {
-                                show: true,
-                                fontSize: '18',
-                                fontWeight: 'bold'
-                            }
-                        },
-                        labelLine: {
-                            show: false
-                        },
-                        data: data
-                    }]
-                })
-
-
-
-                // $.ajax({
-                //     type: 	 'GET',
-                //     url: 	 '/admin/dashboard/data', //dashboard.data
-                //     data: { type : type},
-                //     success: function (res){
-                //
-                //         // $.each(data.records, function(index, value) {
-                //         //         let active = index > 0 ? '<div class="carousel-item">' : '<div class="carousel-item active">'
-                //         //         let active_page = index > 0 ? '' : 'active'
-                //         //         $('#content_news').append(
-                //         //             active +
-                //         //             '<div class="bg-light rounded">'+
-                //         //             '<img src="images/ico_noticias.png" width="60" class="bg-danger p-2"/>'+
-                //         //             '<span class="px-5 font-weight-lighter">' + value.titulo + '</span>'+
-                //         //             '</div>'+
-                //         //             '</div>'
-                //         //         )
-                //         //         $('#pages_news').append(
-                //         //             '<li data-target="#slider-noticias" data-slide-to="' + index + '" class="py-1 ' + active_page + '" style="width: 12px;"></li>'
-                //         //         )
-                //         // })
-                //     },
-                //     error: function(err){}
-                // })
             }
 
             //Convertir labels a object
@@ -371,26 +283,27 @@
             }
 
             function appendTable(sales) {
-                $.each(sales, function(index, value) {
-                    let class =
-                    <td><span class="badge bg-success">Approved</span></td>
-                    <td><span class="badge bg-danger">Rejected</span></td>
-                    <td><span class="badge bg-warning">Pending</span></td>
+                $('#table-body').empty()
+
+                let statuses = {!! json_encode($statuses) !!}
+                $.each(sales, function (index, value) {
+                    let fecha = new Date(value.created_at);
+                    let dia = fecha.getUTCDate().toString().padStart(2, '0');
+                    let mes = (fecha.getUTCMonth() + 1).toString().padStart(2, '0');
+                    let anio = fecha.getUTCFullYear().toString();
+                    let fechaFormateada = dia + '/' + mes + '/' + anio;
 
                     $('#table-body').append(`
                         <tr>
                             <th scope="row">${value.id}</th>
-                            <td>${value.username}</td>
-                            <td>${value.amount}</td>
-                            <td>${value.date}</td>
-                             <td><span class="badge `+`${class}">`+`${status}</span></td>
+                            <td>${value.customer.name}</td>
+                            <td>Q${value.amount_paid}</td>
+                            <td>${fechaFormateada}</td>
+                            <td>${statuses[value.status]}</td>
                         </tr>
                     `)
-
-
                 })
             }
-
         })
 
 

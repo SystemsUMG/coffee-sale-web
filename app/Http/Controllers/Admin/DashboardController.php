@@ -13,7 +13,8 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        return view('admin.dashboard.dashboard');
+        $statuses = $this->statuses();
+        return view('admin.dashboard.dashboard', compact('statuses'));
     }
 
     public function dashboard(Request $request)
