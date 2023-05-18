@@ -44,7 +44,7 @@ class DashboardController extends Controller
         $sales = Sale::whereBetween('created_at', [$date['begin'], $date['end']]);
         $collect_sales = collect($sales->with('customer')->get());
         $sales_count = $sales->count();
-        $sales_money = $sales->sum('amount_paid');
+        $sales_money = "Q" . round($sales->sum('amount_paid'), 2);
         $customers = $sales->distinct()->get(['user_id']);
 
         // Gráfica de ventas por producto
@@ -127,8 +127,8 @@ class DashboardController extends Controller
         }
 
         $this->response = [
-            'sales' =>  $sales_count,
-            'sales_money' =>  $sales_money,
+            'sales' => $sales_count,
+            'sales_money' => $sales_money,
             'customers' => $customers->count(),
             'graphics' => [
                 'sales' => [
@@ -148,6 +148,6 @@ class DashboardController extends Controller
 
     public function addValue($date_begin, $date_end, $sales)
     {
-        return $sales->whereBetween('created_at', [$date_begin, $date_end])->sum('amount_paid');
+        return round($sales->whereBetween('created_at', [$date_begin, $date_end])->sum('amount_paid'), 2);
     }
 }
