@@ -155,9 +155,6 @@ class SaleController extends Controller
     {
         try {
             if ($sale->authorization_number == null) {
-                $sale->authorization_number = strtoupper(Str::random(15));
-                $sale->save();
-
                 $settings = Setting::whereBetween('key', [6, 8])->get();
                 // Agrupar los resultados por clave 'key'
                 $groupedSettings = $settings->groupBy('key');
@@ -177,6 +174,9 @@ class SaleController extends Controller
                 //Enviar correo
                 $mail = new BillingEmail($sale, $name);
                 Mail::to($sale->customer->email)->send($mail);
+
+                $sale->authorization_number = strtoupper(Str::random(15));
+                $sale->save();
 
                 return back()->with('success', 'Factura enviada');
             } else {
