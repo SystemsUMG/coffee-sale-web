@@ -18,6 +18,7 @@ use Str;
 
 class SaleController extends Controller
 {
+    public $sale;
     /**
      * Display a listing of the resource.
      */
@@ -109,17 +110,19 @@ class SaleController extends Controller
             }
             $sale->amount_paid = $amount_paid;
             $sale->save();
+            $this->sale = $sale->id;
             DB::commit();
             $this->message = 'Se ha generado tu pedido correctamente';
             $this->status_code = 200;
         } catch (Exception $exception) {
+            $this->sale = null;
             DB::rollBack();
             $this->message = $exception->getMessage();
             $this->status_code = 500;
         }
         $this->response = [
             'message' => $this->message,
-            'sale_id' => $sale->id
+            'sale_id' => $this->sale
         ];
         return response()->json($this->response, $this->status_code);
     }
