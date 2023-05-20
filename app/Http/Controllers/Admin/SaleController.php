@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Jobs\MailBillingJob;
 use App\Mail\BillingEmail;
 use App\Models\Product;
 use App\Models\Sale;
@@ -158,52 +159,18 @@ class SaleController extends Controller
     {
         try {
             if ($sale->authorization_number == null) {
+                DB::beginTransaction();
                 $sale->authorization_number = strtoupper(Str::random(15));
                 $sale->save();
-
-                $settings = Setting::whereBetween('key', [6, 8])->get();
-                // Agrupar los resultados por clave 'key'
-                $groupedSettings = $settings->groupBy('key');
-                // Asignar los valores a las variables correspondientes
-                $phone = $groupedSettings[6][0]->value ?? '';
-                $nit = $groupedSettings[7][0]->value ?? '';
-                $address = $groupedSettings[8][0]->value ?? '';
-
-                $pdf = Pdf::loadView('admin.sales.bill', compact('sale', 'phone', 'nit', 'address'));
-                $name = $this->saveBill($pdf, $sale);
-
-                //URL para descarga en boton
-                $file = $sale->bill()->first();
-                $url = asset(Storage::url($file->url));
-                $sale->url = $url;
-
-                //Enviar correo
-                $mail = new BillingEmail($sale, $name);
-                Mail::to($sale->customer->email)->send($mail);
-
-                return back()->with('success', 'Factura enviada');
+                MailBillingJob::dispatch($sale);
+                DB::commit();
+                return back()->with('success', 'Se enviará la factura');
             } else {
                 return back()->with('error', 'La factura ya fue generada');
             }
-
         } catch (Exception $e) {
+            DB::rollBack();
             return back()->with('error', 'No fue posible generar la factura');
         }
-    }
-
-    /**
-     * Almacenar factura
-     */
-    public function saveBill($file, Sale $sale): string
-    {
-        $name = "$sale->authorization_number.pdf";
-        $file->save(storage_path("app/public/bills/$name"));
-
-        $sale->bill()->create([
-            'url' => "bills/$name",
-            'type' => 1
-        ]);
-
-        return "storage/bills/$name";
     }
 }
