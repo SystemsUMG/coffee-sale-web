@@ -1,8 +1,32 @@
 @extends('frontend.index')
 @section('content')
     <div class="container mt-5 py-4 my-3">
-        <div class="card position-relative">
-            <a href="{{ route('home') }}" class="position-absolute top-100 start-50 translate-middle btn btn-primary btn-lg">
+        <div class="container col-md-4">
+            <ul class="nav nav-tabs">
+                <li class="nav-item">
+                    <p class="nav-link text-info disabled" aria-current="page">
+                        <i class="bi bi-check"></i>
+                        Mi carrito
+                    </p>
+                </li>
+                <li class="nav-item">
+                    <p class="nav-link text-info disabled" aria-current="page">
+                        <i class="bi bi-check"></i>
+                        Pago
+                    </p>
+                </li>
+                <li class="nav-item">
+                    <p class="nav-link text-info disabled" aria-current="page">
+                        <i class="bi bi-check"></i>
+                        Fin del pedido
+                    </p>
+                </li>
+            </ul>
+        </div>
+
+        <div class="card position-relative mt-5">
+            <a href="{{ route('home') }}"
+               class="position-absolute top-100 start-50 translate-middle btn btn-primary btn-lg">
                 Listo
             </a>
             <div class="card-header text-center">

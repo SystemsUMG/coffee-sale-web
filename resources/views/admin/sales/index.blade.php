@@ -53,7 +53,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-cancel rounded-3" data-bs-dismiss="modal">Cancelar</button>
-                    <a type="submit" class="btn btn-submit rounded-3" id="billing">Facturar</a>
+                    <a type="submit" class="btn btn-submit rounded-3" id="billing" >Facturar</a>
                 </div>
             </div>
         </div>
@@ -172,6 +172,9 @@
 
                     //Boton facturar o ver factura
                     let billing = $('#modal-sale-details #billing')
+                    if (item.sale.status !== 5) {
+                        billing.prop("hidden", true)
+                    }
                     if (!item.sale.authorization_number) {
                         billing.attr('href', '/admin/billing/'+id)
                         billing.text('Facturar')
