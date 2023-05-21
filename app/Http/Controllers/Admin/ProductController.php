@@ -132,12 +132,14 @@ class ProductController extends Controller
     public function deleteImages(Request $request)
     {
         try{
-            $url = Image::where('url', 'images/'.$request->name)->get();
-            if (count($url) == 1) {
+            $total_images = Image::where('url', 'images/'.$request->name)->count();
+            if ($total_images == 1) {
                 Storage::disk('public')->delete('images/'.$request->name);
             }
             $product = Product::where('id', $request->id)->first();
-            $image = $product->images()->where('url', 'images/'.$request->name)->first();
+            $image = $product->images()->where('url', 'images/'.$request->name)
+                ->where('type', $request->type)
+                ->first();
             $image->delete();
             return response()->json('Éxito');
         }catch (\Exception $exception) {

@@ -75,8 +75,16 @@ class SaleController extends Controller
 
     public function updateTracking(Sale $sale, Request $request)
     {
-        $this->updateStatus($sale, $request->status);
-        return back()->with('success', 'Estado actualizado');
+        if ($request->status == $sale->status + 1) {
+            $this->updateStatus($sale, $request->status);
+            $this->response_type = 'success';
+            $this->message = 'Estado actualizado';
+        } else {
+            $this->response_type = 'error';
+            $this->message = 'No se puede saltar estados';
+        }
+
+        return back()->with($this->response_type, $this->message);
     }
 
     /**
@@ -107,6 +115,8 @@ class SaleController extends Controller
                         'amount' => $item['amount'],
                     ]);
                     $amount_paid += $product->price * $item['amount'];
+                    $product->stock = $product->stock - $item['amount'];
+                    $product->save();
                 }
             }
             $sale->amount_paid = $amount_paid;

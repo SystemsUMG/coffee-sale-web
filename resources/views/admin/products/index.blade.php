@@ -201,7 +201,7 @@
                     $.ajax({
                         type: 'POST',
                         url: '/admin/product/delete',
-                        data: {name: file.name, id: id },
+                        data: {name: file.name, id: id, type: 1 },
                         headers: {
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                         },
@@ -240,7 +240,7 @@
                     $.ajax({
                         type: 'POST',
                         url: '/admin/product/delete',
-                        data: {name: file.name, id: id },
+                        data: {name: file.name, id: id, type: 2 },
                         headers: {
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                         },
