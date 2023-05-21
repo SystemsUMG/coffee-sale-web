@@ -62,7 +62,8 @@
                         <svg width="44" height="31" viewBox="0 0 44 31" fill="none" xmlns="http://www.w3.org/2000/svg"
                              style="opacity: 1; margin-right: 10px;">
                             <rect y="0.321289" width="43.1522" height="30" rx="5.83333" fill="#00579F"></rect>
-                            <path d="M18.4634 20.4247H16.0234L17.5495 10.8577H19.9893L18.4634 20.4247Z" fill="white"></path>
+                            <path d="M18.4634 20.4247H16.0234L17.5495 10.8577H19.9893L18.4634 20.4247Z"
+                                  fill="white"></path>
                             <path
                                 d="M27.3074 11.0919C26.8261 10.8983 26.0628 10.6846 25.119 10.6846C22.7095 10.6846 21.0127 11.9872 21.0023 13.8497C20.9823 15.2238 22.2171 15.987 23.1407 16.4451C24.0847 16.9133 24.4055 17.2189 24.4055 17.6362C24.3959 18.2771 23.6428 18.5726 22.9403 18.5726C21.9662 18.5726 21.4442 18.4203 20.651 18.0637L20.3297 17.9108L19.9883 20.0584C20.5605 20.3227 21.6149 20.5573 22.7095 20.5676C25.2696 20.5676 26.9363 19.2851 26.9561 17.3003C26.9658 16.2113 26.3138 15.3768 24.908 14.6949C24.0546 14.2571 23.532 13.9619 23.532 13.5141C23.542 13.1069 23.9741 12.6898 24.9374 12.6898C25.7306 12.6694 26.3134 12.8627 26.7549 13.0562L26.9756 13.1578L27.3074 11.0919Z"
                                 fill="white"></path>
@@ -78,7 +79,8 @@
                         </svg>
                         <svg width="44" height="31" viewBox="0 0 44 31" fill="none" xmlns="http://www.w3.org/2000/svg"
                              style="opacity: 1;">
-                            <rect x="0.117188" y="0.321289" width="43.1522" height="30" rx="5.83333" fill="black"></rect>
+                            <rect x="0.117188" y="0.321289" width="43.1522" height="30" rx="5.83333"
+                                  fill="black"></rect>
                             <path fill-rule="evenodd" clip-rule="evenodd"
                                   d="M21.9994 21.7673C20.5303 23.0528 18.6245 23.8288 16.5421 23.8288C11.8956 23.8288 8.12891 19.9655 8.12891 15.2C8.12891 10.4345 11.8956 6.57129 16.5421 6.57129C18.6245 6.57129 20.5303 7.3473 21.9994 8.63275C23.4686 7.34732 25.3743 6.57133 27.4568 6.57133C32.1032 6.57133 35.8699 10.4345 35.8699 15.2001C35.8699 19.9656 32.1032 23.8288 27.4568 23.8288C25.3743 23.8288 23.4685 23.0528 21.9994 21.7673Z"
                                   fill="#ED0006"></path>
@@ -125,10 +127,15 @@
                         <div class="row g-3">
                             <div class="col-sm-12">
                                 <x-inputs.number
-                                    name="bill_number"
+                                    name="chequeNumber"
                                     label="Número de cheque"
                                     required
                                 ></x-inputs.number>
+                                <x-inputs.text
+                                    name="chequeBookID"
+                                    label="ID libreta de cheque"
+                                    required
+                                ></x-inputs.text>
                             </div>
                         </div>
                     </form>
@@ -251,7 +258,8 @@
             let cardNumber = '';
             let expirationDate = '';
             let cvv = '';
-            let billNumber = '';
+            let chequeNumber = '';
+            let chequeBookID = '';
             if (formCard) {
                 cardNumber = formCard.querySelector('#card_number').value
                 expirationDate = formCard.querySelector('#expiration_date').value
@@ -259,20 +267,22 @@
             }
 
             if (formCheck) {
-                billNumber = formCheck.querySelector('#bill_number').value
+                chequeNumber = formCheck.querySelector('#chequeNumber').value
+                chequeBookID = formCheck.querySelector('#chequeBookID').value
             }
 
             let paymentMethodType;
             let cardDetails;
-            let billDetails = {}
+            let chequeDetails = {}
             switch (paymentMethodId) {
                 case 1:
                     paymentMethodType = "cash"
                     break
                 case 2:
                     paymentMethodType = "cheque"
-                    billDetails = {
-                        "bill_number": billNumber,
+                    chequeDetails = {
+                        "chequeNumber": chequeNumber,
+                        "chequeBookID": chequeBookID,
                     }
                     break;
                 case 3:
@@ -293,7 +303,7 @@
                 "paymentType": paymentMethodType,
                 "amount": totalAmount,
                 "cardDetails": cardDetails,
-                "bill_number": billDetails,
+                "chequeDetails": chequeDetails,
             })
                 .then(function (response) {
                     generateSale(response.data)
@@ -312,7 +322,7 @@
                     'X-XSRF-TOKEN': "{{csrf_token()}}"
                 },
                 'user_id': {!! $user->id !!},
-                'transaction_number': response.message,
+                'transaction_number': response.transactionID,
                 'payment_type': paymentMethodId,
                 'items': items,
                 'date_generated': "{{ \Carbon\Carbon::now() }}"
